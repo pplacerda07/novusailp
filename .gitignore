@@ -39,7 +39,7 @@ CLAUDE.local.md
 # depois.
 #
 # Se o repositório for privado e você quiser esses arquivos versionados,
-# comente as duas linhas abaixo e rode:
+# comente a linha abaixo e rode:
 #   git add nova_identidade && git commit -m "Adiciona material de marca"
 # ============================================================================
-1783305688219-P_GINA_2_EAGLE/nova_identidade/
+nova_identidade/
