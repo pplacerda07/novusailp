@@ -1,0 +1,204 @@
+---
+// ScrollIcons — protótipo do efeito de scroll com ícones que viram texto.
+//
+// Adaptado do demo de referência, com quatro mudanças de fundo:
+//   1. Cores da Novus: começa branco e vira azul #015EFD (o demo ia de preto para bege).
+//      Como o texto final cai sobre o azul, ele é branco.
+//   2. GSAP vem do npm do projeto, não de CDN.
+//   3. Pin de 4 telas em vez de 8: metade do tempo preso na mesma seção.
+//   4. prefers-reduced-motion mostra tudo estático (o demo não tinha fallback e
+//      o texto nasce opacity 0, ou seja, ficaria invisível).
+//
+// Classes com prefixo `sc-` para não colidir com o webflow.css do template.
+
+const icones = [
+  { src: "/images/anim/anim-1-whatsapp.png", alt: "WhatsApp" },
+  { src: "/images/anim/anim-2-qualifica.png", alt: "Qualificação de leads" },
+  { src: "/images/anim/anim-3-agenda.png", alt: "Agenda" },
+  { src: "/images/anim/anim-4-crm.png", alt: "CRM" },
+  { src: "/images/anim/anim-5-site.png", alt: "Site" },
+];
+
+// Cada trecho de texto entra depois do ícone correspondente.
+const trechos = [
+  "O lead chega no WhatsApp.",
+  "A Novus responde e qualifica.",
+  "Agenda o próximo passo.",
+  "Registra no seu funil.",
+  "Sua equipe assume com contexto.",
+];
+---
+
+<section class="sc-section" data-scroll-icons>
+  <div class="sc-header">
+    <h2>Nós conectamos tudo.</h2>
+    <p>Do primeiro contato até o vendedor certo.</p>
+  </div>
+
+  <div class="sc-icons">
+    {icones.map((i) => (
+      <div class="sc-icon">
+        <img src={i.src} width="240" height="240" loading="lazy" alt={i.alt} />
+      </div>
+    ))}
+  </div>
+
+  <p class="sc-text">
+    {trechos.map((t) => (
+      <>
+        <span class="sc-slot" aria-hidden="true"></span>
+        <span class="sc-seg">{t}</span>
+      </>
+    ))}
+  </p>
+</section>
+
+<style is:global>
+  /* O pin do ScrollTrigger usa position:fixed e não convive bem com o
+     `overflow: clip` que o template aplica no .page-wrapper. Mas simplesmente
+     trocar por `visible` libera 329px de transbordo horizontal na home (carrossel
+     3D e outros elementos decorativos contam com esse clip) e nasce uma barra de
+     rolagem lateral.
+     A saída é clipar só no eixo X. `overflow-x: clip` com `overflow-y: visible` é
+     a única combinação em que o par não é coagido para `auto`, então o transbordo
+     lateral continua contido e o pin funciona na vertical.
+
+     ATENÇÃO: toda seção nova que usar `pin` precisa entrar nesta lista, senão
+     o pin dela quebra. Hoje: .sc-section (ícones) e .dc-section (baralho). */
+  .page-wrapper:has(.sc-section),
+  .page-wrapper:has(.dc-section) {
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+
+  .sc-section {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--base--white);
+    transition: background-color 0.3s ease;
+  }
+
+  .sc-header {
+    position: absolute;
+    top: 27%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    will-change: transform, opacity;
+  }
+  .sc-header h2 {
+    color: var(--base--navy);
+    margin: 0;
+    /* Maior que o h2 padrão do site: aqui ele é a única coisa na tela. */
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1.1;
+  }
+  .sc-header p {
+    color: var(--grey--grey-400);
+    margin: 0;
+    font-size: clamp(1.125rem, 1.7vw, 1.625rem);
+  }
+
+  .sc-icons {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    will-change: transform;
+    z-index: 2;
+  }
+  .sc-icon {
+    flex: 1;
+    aspect-ratio: 1;
+    will-change: transform;
+  }
+  .sc-icon img,
+  .sc-dup img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .sc-text {
+    position: relative;
+    max-width: 60rem;
+    margin: 0;
+    text-align: center;
+    color: var(--base--white);
+    font-size: clamp(1.75rem, 4vw, 3.25rem);
+    font-weight: var(--_typography---font-weight--bold);
+    line-height: 1.15;
+    letter-spacing: -.03em;
+  }
+  .sc-seg {
+    opacity: 0;
+  }
+  .sc-slot {
+    width: 3.75rem;
+    height: 3.75rem;
+    margin-top: -0.625rem;
+    display: inline-block;
+    vertical-align: middle;
+    visibility: hidden;
+  }
+
+  @media screen and (max-width: 991px) {
+    .sc-header {
+      top: 42%;
+      width: 100%;
+    }
+    .sc-slot {
+      width: 1.875rem;
+      height: 1.875rem;
+      margin-top: -0.25rem;
+    }
+  }
+
+  /* Sem animação: o efeito não roda, então a seção precisa se sustentar parada.
+     Fundo azul, texto visível, ícones em linha. */
+  @media (prefers-reduced-motion: reduce) {
+    .sc-section {
+      height: auto;
+      padding-block: 5rem;
+      gap: 3rem;
+      background-color: var(--base--blue);
+    }
+    .sc-header {
+      position: static;
+      transform: none;
+      width: 100%;
+    }
+    .sc-header h2,
+    .sc-header p {
+      color: var(--base--white);
+    }
+    .sc-icons {
+      position: static;
+      max-width: 34rem;
+    }
+    .sc-seg {
+      opacity: 1;
+    }
+    .sc-slot {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import "../scripts/scroll-icons.ts";
+</script>

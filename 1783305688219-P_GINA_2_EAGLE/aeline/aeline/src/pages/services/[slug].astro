@@ -1,0 +1,51 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import ServiceDetailHero from "../../components/ServiceDetailHero.astro";
+import ServiceBenefits from "../../components/ServiceBenefits.astro";
+import ServiceTestiSlider from "../../components/ServiceTestiSlider.astro";
+import CtaSection from "../../components/CtaSection.astro";
+
+export async function getStaticPaths() {
+  const services = await getCollection("services");
+  return services.map((s) => ({ params: { slug: s.id }, props: { service: s } }));
+}
+
+interface Props { service: CollectionEntry<"services"> }
+const { service } = Astro.props;
+
+const siteUrl = (Astro.site?.toString() ?? "").replace(/\/$/, "");
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: service.data.name,
+  description: service.data.summary,
+  serviceType: service.data.name,
+  provider: { "@id": `${siteUrl}/#organization` },
+  image: new URL(service.data.card, Astro.site).toString(),
+  url,
+};
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Início", item: `${siteUrl}/` },
+    { "@type": "ListItem", position: 2, name: "Produtos", item: `${siteUrl}/#produtos` },
+    { "@type": "ListItem", position: 3, name: service.data.name, item: url },
+  ],
+};
+---
+<BaseLayout title={`${service.data.name} — Novus AI`} description={service.data.summary} jsonLd={[serviceSchema, breadcrumb]}>
+  <Navbar variant="secondary" />
+  <main class="main-wrapper">
+    <ServiceDetailHero service={service} />
+    <ServiceBenefits service={service} />
+    <ServiceTestiSlider />
+    <CtaSection />
+    <Footer />
+  </main>
+</BaseLayout>

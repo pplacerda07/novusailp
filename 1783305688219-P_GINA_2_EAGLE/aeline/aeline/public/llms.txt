@@ -1,0 +1,64 @@
+# Novus AI
+
+> Agentes de IA que atendem, qualificam e agendam pelo WhatsApp. Parceiro
+> oficial Meta. Mensalidade fechada, sem cobrança por token.
+
+A Novus AI cria agentes de atendimento e vendas para empresas que usam o
+WhatsApp como canal comercial. O agente responde em segundos, entende o que o
+cliente precisa, tira dúvidas com base nas informações da empresa, coleta dados,
+qualifica o contato e conduz o próximo passo.
+
+O produto principal se chama **VendeAI**.
+
+## O que o agente faz
+
+- Responde o cliente em segundos, inclusive à noite e nos fins de semana
+- Tira dúvidas usando as informações, regras, produtos e serviços da empresa
+- Coleta dados e identifica se existe oportunidade comercial
+- Agenda reuniões, visitas e avaliações quando configurado
+- Entrega a conversa para a equipe com o contexto do atendimento
+- Retoma contatos que demonstraram interesse e não avançaram
+- Avisa o dono ou o gerente no WhatsApp pessoal quando aparece uma decisão que
+  exige uma pessoa, como pedido de desconto ou negociação fora do padrão
+
+## Diferenças em relação a um chatbot
+
+O cliente não precisa escolher opções em menu. Ele escreve do jeito que quiser,
+inclusive por áudio, e o agente conduz a conversa pelo contexto. Um chatbot
+tradicional depende de roteiro e trava quando recebe uma pergunta fora dele.
+
+## Como o agente é treinado
+
+Com o material que a empresa já tem: PDF, áudio, vídeo, planilha e instruções
+escritas. A equipe da Novus faz a configuração junto com o cliente, em cerca de
+30 minutos.
+
+## Cobrança
+
+Mensalidade fechada. Não há cobrança por token nem por mensagem: o valor não
+muda conforme o volume de conversas do mês.
+
+## Conexão com o WhatsApp
+
+Feita pela API oficial da Meta, de quem a Novus é parceira. Isso deixa o número
+mais estável do que soluções que conectam o WhatsApp por fora.
+
+## Integrações
+
+A plataforma tem API aberta e integra com CRM, agenda e demais sistemas da
+operação comercial.
+
+## Suporte
+
+Suporte da plataforma e vídeos explicativos de cada módulo.
+
+## Contato
+
+- WhatsApp: +55 67 3198-0930
+- Site: https://novusailp.vercel.app
+
+## Limites do que prometemos
+
+A Novus não promete vendas garantidas, aumento garantido de faturamento nem
+substituição da equipe. O agente aumenta capacidade e consistência de
+atendimento; decisões de negociação, análise e julgamento continuam com pessoas.

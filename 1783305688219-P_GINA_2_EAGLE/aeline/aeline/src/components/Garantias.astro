@@ -1,0 +1,92 @@
+---
+// Garantias — os dois gatilhos comerciais: número protegido pela API oficial da
+// Meta e mensalidade fechada, sem cobrança por token.
+//
+// Mesmo estilo de copy da seção do chatbot: título, dois parágrafos e botão,
+// sem cartões. A única diferença é o espelhamento (texto à esquerda, ilustração
+// à direita), para as duas seções vizinhas não ficarem idênticas.
+//
+// A figura é um redesenho em SVG do pictograma de referência, com as partes
+// separadas (cabeça, tronco, mãos, laptop) para poderem ser animadas. Um raster
+// achatado não permitiria isso: não há o que mover.
+
+import { whatsappLink } from "../lib/whatsapp";
+---
+
+<section class="tg-section">
+  <div class="padding-global">
+    <div class="container-large">
+
+      <div class="tg-grid">
+
+        <!-- Copy -->
+        <div class="tg-copy">
+          <h2 data-reveal class="tg-headline">
+            Sem risco para o seu número. Sem susto na fatura.
+          </h2>
+
+          <p data-reveal class="tg-lead">
+            Somos <strong class="tg-forte">parceiro oficial da Meta</strong> e a conexão
+            é feita pela API oficial. Seu número não toma banimento, porque não existe
+            atalho ligando seu WhatsApp por fora, que é o que costuma derrubar número.
+          </p>
+
+          <p data-reveal class="tg-lead">
+            E a conta é fechada. <strong class="tg-forte">Você não paga por token</strong>:
+            se o mês teve cem ou mil conversas, o valor continua o mesmo.
+          </p>
+
+          <div data-reveal class="tg-cta">
+            <a href={whatsappLink()} target="_blank" rel="noopener" class="button is-hero-invert w-inline-block">
+              <div class="text-button-wrap">
+                <div>Falar com um especialista</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Ilustração -->
+        <div class="tg-stage" data-reveal="scale">
+          <svg
+            data-digitando
+            viewBox="0 0 400 350"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-label="Pessoa trabalhando tranquila no computador"
+            class="tg-figura"
+          >
+            <ellipse class="tg-sombra" cx="200" cy="322" rx="148" ry="10" />
+
+            <circle class="tg-cabeca" cx="200" cy="120" r="46" fill="currentColor" />
+
+            <!-- O traço branco cria a folga entre as peças, como no desenho de
+                 referência, em vez de elas se fundirem num borrão só. -->
+            <path
+              class="tg-tronco"
+              d="M96 274C96 218 124 176 160 168C176 164 224 164 240 168C276 176 304 218 304 274Z"
+              fill="currentColor" stroke="#fff" stroke-width="5" stroke-linejoin="round"
+            />
+
+            <rect class="tg-mao tg-mao-e" x="74" y="238" width="52" height="34" rx="17"
+                  fill="currentColor" stroke="#fff" stroke-width="5" />
+            <rect class="tg-mao tg-mao-d" x="274" y="238" width="52" height="34" rx="17"
+                  fill="currentColor" stroke="#fff" stroke-width="5" />
+
+            <path
+              class="tg-laptop"
+              d="M133 196L267 196C273 196 277.5 200 278.6 205.6L291 270L109 270L121.4 205.6C122.5 200 127 196 133 196Z"
+              fill="currentColor" stroke="#fff" stroke-width="5" stroke-linejoin="round"
+            />
+
+            <rect class="tg-mesa" x="18" y="268" width="364" height="26" rx="13" fill="currentColor" />
+          </svg>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import "../scripts/digitando.ts";
+</script>

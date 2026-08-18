@@ -1,0 +1,45 @@
+# Dependências e saída de build
+node_modules/
+dist/
+.astro/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Caches de plataforma
+.vercel
+.wrangler/
+
+# Editores
+.idea/
+CLAUDE.local.md
+.claude/settings.local.json
+
+# ============================================================================
+# MATERIAL COMERCIAL CONFIDENCIAL — NÃO VERSIONADO POR PADRÃO
+#
+# A pasta nova_identidade/ contém o Playbook de Mercado e Vendas, com custo do
+# fornecedor white label (R$ 3.500/mês), margem bruta de cada plano (78,1%,
+# 70,6%, 50,5% e 59,6%) e a estratégia comercial completa.
+#
+# Se este repositório for PÚBLICO, publicar isso significa entregar as margens
+# da Novus para concorrentes e clientes. Histórico de Git é difícil de limpar
+# depois.
+#
+# Se o repositório for privado e você quiser esses arquivos versionados,
+# comente as duas linhas abaixo e rode:
+#   git add nova_identidade && git commit -m "Adiciona material de marca"
+# ============================================================================
+1783305688219-P_GINA_2_EAGLE/nova_identidade/

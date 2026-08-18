@@ -1,0 +1,31 @@
+{
+  "name": "Plano Essencial",
+  "summary": "O início da sua jornada com IA. Agente customizado para atendimento 24/7.",
+  "icon": "/images/cms/698e4863b7c4e4770533722e_mingcute_ai-fill.svg",
+  "card": "/images/cms/6961fe8f17d6448d5348850c_service-img.webp",
+  "headline": "Atendimento inteligente e 24/7",
+  "subtext": "Seu primeiro passo na revolução da IA. Responda clientes, automatize o básico e nunca perca uma mensagem.",
+  "features": [
+    {
+      "title": "Agente de IA customizado",
+      "detail": "Treinado com os dados básicos da sua empresa."
+    },
+    {
+      "title": "Integração WhatsApp",
+      "detail": "Conectado diretamente ao número da sua empresa."
+    },
+    {
+      "title": "Atendimento 24/7",
+      "detail": "Respostas automáticas fora do horário comercial."
+    },
+    {
+      "title": "Painel de controle",
+      "detail": "Acompanhamento do histórico de conversas em tempo real."
+    }
+  ],
+  "quote": "\"O Plano Essencial da Novus AI acabou com as mensagens não respondidas na nossa clínica.\"",
+  "author": "Gerente de Atendimento",
+  "role": "Clínica Odontológica",
+  "avatar": "/images/cms/6961fed3966b530753b60b44_av-author.png",
+  "content": "<p>O Plano Essencial é o ponto de partida ideal para pequenas empresas que desejam profissionalizar o atendimento. Com um agente de IA customizado, você garante que nenhum cliente fique sem resposta.</p><p>‍</p><p>Automatize o atendimento básico, tire dúvidas frequentes e mantenha o contato 24 horas por dia, 7 dias por semana, de forma simples e acessível.</p>"
+}

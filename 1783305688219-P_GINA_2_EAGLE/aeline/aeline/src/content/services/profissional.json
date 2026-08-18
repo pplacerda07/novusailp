@@ -1,0 +1,31 @@
+{
+  "name": "Plano Profissional",
+  "summary": "Otimize sua operação. Agentes que integram sistemas e executam tarefas complexas.",
+  "icon": "/images/cms/698e4863b7c4e4770533722e_mingcute_ai-fill.svg",
+  "card": "/images/cms/6961fe8f17d6448d5348850c_service-img.webp",
+  "headline": "Integração e eficiência operacional",
+  "subtext": "Vá além do atendimento básico. Agentes de IA que se conectam ao seu ERP, CRM e sistemas internos para automatizar processos.",
+  "features": [
+    {
+      "title": "Integração com sistemas",
+      "detail": "Conexão com ERPs, CRMs e outras ferramentas."
+    },
+    {
+      "title": "Automação de processos",
+      "detail": "Agentes que executam tarefas complexas automaticamente."
+    },
+    {
+      "title": "Consultas em linguagem natural",
+      "detail": "Acesso rápido a dados de sistemas via WhatsApp."
+    },
+    {
+      "title": "Atendimento personalizado",
+      "detail": "Respostas baseadas no histórico do cliente."
+    }
+  ],
+  "quote": "\"O Plano Profissional transformou nossa operação. Nosso ERP agora está conectado ao WhatsApp e a equipe não precisa mais consultar planilhas.\"",
+  "author": "Diretor de Operações",
+  "role": "Distribuidora",
+  "avatar": "/images/cms/6961fed3966b530753b60b44_av-author.png",
+  "content": "<p>O Plano Profissional é para empresas que precisam de mais do que apenas atendimento. Com integração aos seus sistemas internos (ERP, CRM, etc.), nossos agentes de IA executam tarefas complexas e acessam dados em tempo real.</p><p>‍</p><p>Automatize processos operacionais, reduza o trabalho manual e ofereça um atendimento verdadeiramente personalizado e eficiente para seus clientes.</p>"
+}

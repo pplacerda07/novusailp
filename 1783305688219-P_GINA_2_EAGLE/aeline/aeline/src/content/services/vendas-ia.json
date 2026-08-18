@@ -1,0 +1,31 @@
+{
+  "name": "Plano Vendas IA",
+  "summary": "Seu melhor vendedor, trabalhando 24h por dia. Agentes treinados para fechar negócios.",
+  "icon": "/images/cms/698e4863b7c4e4770533722e_mingcute_ai-fill.svg",
+  "card": "/images/cms/6961fe8f17d6448d5348850c_service-img.webp",
+  "headline": "Prospecção, qualificação e fechamento",
+  "subtext": "Transforme o WhatsApp em uma máquina de vendas. Agentes de IA que conduzem negociações, qualificam leads e vendem.",
+  "features": [
+    {
+      "title": "Qualificação de leads",
+      "detail": "Identificação rápida do estágio de compra e perfil do cliente."
+    },
+    {
+      "title": "Negociação ativa",
+      "detail": "Agentes treinados para contornar objeções e conduzir vendas."
+    },
+    {
+      "title": "Gestão de funil",
+      "detail": "Leads classificados automaticamente no seu CRM."
+    },
+    {
+      "title": "Geração de pipeline",
+      "detail": "Aumento significativo de oportunidades reais."
+    }
+  ],
+  "quote": "\"O Plano Vendas IA da Novus aumentou nossa conversão em 40% no primeiro trimestre.\"",
+  "author": "Diretor Comercial",
+  "role": "Imobiliária",
+  "avatar": "/images/cms/6961fed3966b530753b60b44_av-author.png",
+  "content": "<p>O Plano Vendas IA é focado em resultados comerciais. Seus agentes conversacionais não apenas tiram dúvidas, mas conduzem o cliente pelo funil de vendas, qualificam ativamente e contornam objeções.</p><p>‍</p><p>Aumente a produtividade da sua equipe comercial e garanta que nenhuma oportunidade seja perdida com agentes que vendem 24 horas por dia.</p>"
+}

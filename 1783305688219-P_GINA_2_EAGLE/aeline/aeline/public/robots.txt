@@ -1,0 +1,27 @@
+User-agent: *
+Allow: /
+
+# Rastreadores dos motores de resposta. Liberados de propósito: é assim que a
+# Novus aparece quando alguém pergunta a uma IA sobre atendimento no WhatsApp.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://novusailp.vercel.app/sitemap-index.xml

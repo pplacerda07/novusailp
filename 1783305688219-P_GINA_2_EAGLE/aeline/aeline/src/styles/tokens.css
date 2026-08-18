@@ -1,0 +1,293 @@
+/* ============================================================================
+   Novus AI — design tokens
+   Fonte: novus-ai-brand-guide-v1.pdf (v1.0, ago/2026)
+
+   Paleta oficial      Novus Blue #015EFD · Deep Navy #041F30
+                       Sky #BFD9E8 · Ice #EAF6FA · Cloud #F5F8FC
+   Proporção           70% claros · 20% azul · 10% marinho
+   Tipografia          Manrope — títulos Bold 700, corpo Regular 400 / Medium 500
+                       fallback: Arial, Helvetica, sans-serif
+
+   IMPORTANTE: este arquivo precisa ser importado DEPOIS do webflow.css
+   (ver BaseLayout.astro). O webflow.css declara um :root próprio com a paleta
+   original do template — quem carrega por último vence.
+   ============================================================================ */
+:root {
+  /* --- Cores da marca ------------------------------------------------- */
+  --base--blue: #015EFD;           /* Novus Blue — marca e ação principal */
+  --base--blue-dark: #0149C7;      /* hover / estados pressionados */
+  --base--navy: #041F30;           /* Deep Navy — texto e fundos escuros */
+  --base--sky: #BFD9E8;            /* apoio e superfícies */
+  --base--ice: #EAF6FA;            /* fundos suaves */
+  --base--cloud: #F5F8FC;          /* base neutra */
+  --base--white: #FFFFFF;
+  --base--red: #E5484D;            /* apenas erros de formulário */
+  --base--whatsapp: #02A18F;       /* CTA de conversa. Fora da paleta do guia, escolha do cliente */
+  --base--whatsapp-dark: #017F71;  /* hover, e alternativa acessível para texto pequeno */
+  --base--whatsapp-claro: #8FEBD2; /* mesmo verde clareado, para uso sobre o azul da marca:
+                                      o #02A18F sobre #015EFD dá 1,6:1 e some */
+
+  /* Aliases herdados do template (webflow.css depende destes nomes).
+     --base--green era o verde-limão do Eagle; agora aponta para o azul. */
+  --base--green: var(--base--blue);
+  --base--yellow: var(--base--blue);
+  --base--light-blue: #4C8BFF;
+  --base--black: var(--base--navy);
+  --base--translucent-black: #041F3059;
+  --base--grey-light: var(--base--ice);
+
+  /* --- Escala neutra (100 = mais claro → 900 = mais escuro) ------------ */
+  --grey--grey-100: #F5F8FC;       /* Cloud */
+  --grey--grey-200: #EAF6FA;       /* Ice */
+  --grey--grey-300: #BFD9E8;       /* Sky */
+  --grey--grey-400: #5A7385;       /* texto secundário — 5.2:1 no branco */
+  --grey--grey-500: #47606F;
+  --grey--grey-600: #354C59;
+  --grey--grey-700: #1F3746;
+  --grey--grey-800: #0E2938;
+  --grey--grey-900: #041F30;       /* Deep Navy */
+
+  /* --- Fundos ---------------------------------------------------------- */
+  --bg-color--bg-default: var(--base--white);
+  --bg-color--bg-white: var(--base--white);
+  --bg-color--bg-primary: var(--grey--grey-100);
+  --bg-color--bg-secondary: var(--grey--grey-200);
+  --bg-color--bg-subtle: var(--grey--grey-100);
+  --bg-color--bg-dark: var(--grey--grey-900);
+  --bg-color--bg-green: var(--base--blue);
+  --bg-color--bg-hover: var(--base--grey-light);
+
+  /* --- Texto ----------------------------------------------------------- */
+  --text-color--text-primary: var(--grey--grey-900);
+  --text-color--text-secondary: var(--grey--grey-400);
+  --text-color--text-subtle: var(--grey--grey-300);
+  --text-color--text-on-primary: var(--base--white);   /* sobre azul/marinho */
+  --text-color--text-on-secondary: var(--grey--grey-300);
+
+  /* --- Bordas ---------------------------------------------------------- */
+  --border-color--border-primary: var(--grey--grey-200);
+  --border-color--border-alternate: var(--grey--grey-300);
+  --base-color-neutral--neutral-darker: var(--grey--grey-300);
+
+  /* --- Blocos escuros (texto branco sobre marinho) --------------------- */
+  --new-base---black: var(--base--navy);
+  --new-base---white: var(--base--white);
+  --new-base---bg-primary: var(--base--navy);
+  --new-base---bg-secondary: #0E2938;
+  --new-base---text-primary: #FFFFFF;
+  --new-base---text-secondary: #FFFFFFB3;
+  --new-base---text-tertiary: #FFFFFF80;
+  --new-base---border-default: #FFFFFF1F;
+  --new-base---border-subtle: #FFFFFF33;
+  --new-base---accent-indigo: var(--base--blue);
+  --new-base---accent-cyan: var(--base--light-blue);
+  --new-base---accent-violet: var(--base--blue-dark);
+  --new-base---accent-sky: var(--base--sky);
+  --new-base---base--black: var(--base--navy);
+
+  /* --- Raio de canto (guia: 24–32px, grid de 8px) ---------------------- */
+  --radius--card: 1.75rem;         /* 28px */
+  --radius--surface: 1.5rem;       /* 24px */
+  --radius--control: 5rem;         /* pílula — botões */
+
+  /* --- Tipografia: famílias -------------------------------------------- */
+  --_typography---font-family--body: Manrope, Arial, Helvetica, sans-serif;
+  --_typography---font-family--headers: Manrope, Arial, Helvetica, sans-serif;
+  --_typography---font-family--alternate: Manrope, Arial, Helvetica, sans-serif;
+
+  /* --- Tipografia: pesos ----------------------------------------------- */
+  --_typography---font-weight--thin: 100;
+  --_typography---font-weight--extra-light: 200;
+  --_typography---font-weight--light: 300;
+  --_typography---font-weight--regular: 400;
+  --_typography---font-weight--medium: 500;
+  --_typography---font-weight--semibold: 600;
+  --_typography---font-weight--bold: 700;
+  --_typography---font-weight--extra-bold: 800;
+  --_typography---font-weight--black: 900;
+
+  /* --- Tipografia: títulos (guia manda Bold 700) ----------------------- */
+  --_typography---h1--font-family: var(--_typography---font-family--headers);
+  --_typography---h1--font-size: 3.75rem;
+  --_typography---h1--line-height: 1.15;
+  --_typography---h1--font-weight: var(--_typography---font-weight--bold);
+  --_typography---h1--letter-spacing: -.04em;
+  --_typography---h2--font-family: var(--_typography---font-family--headers);
+  --_typography---h2--font-size: 3rem;
+  --_typography---h2--line-height: 1.2;
+  --_typography---h2--font-weight: var(--_typography---font-weight--bold);
+  --_typography---h2--letter-spacing: -.03em;
+  --_typography---h3--font-family: var(--_typography---font-family--headers);
+  --_typography---h3--font-size: var(--_sizes---fixed--xlarge);
+  --_typography---h3--line-height: 1.4;
+  --_typography---h3--font-weight: var(--_typography---font-weight--bold);
+  --_typography---h3--letter-spacing: -.02em;
+  --_typography---h4--font-family: var(--_typography---font-family--headers);
+  --_typography---h4--font-size: var(--_sizes---fixed--large);
+  --_typography---h4--line-height: 1.2;
+  --_typography---h4--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---h4--letter-spacing: 0em;
+  --_typography---h5--font-family: var(--_typography---font-family--headers);
+  --_typography---h5--font-size: 1.125rem;
+  --_typography---h5--line-height: 1.15;
+  --_typography---h5--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---h5--letter-spacing: 0em;
+  --_typography---h6--font-family: var(--_typography---font-family--headers);
+  --_typography---h6--font-size: 1.125rem;
+  --_typography---h6--line-height: 1.2;
+  --_typography---h6--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---h6--letter-spacing: 0em;
+
+  /* --- Tipografia: escala de corpo ------------------------------------- */
+  --_typography---xs--font-size: var(--_sizes---fixed--small);
+  --_typography---xs--line-height: 1.5;
+  --_typography---xs--letter-spacing: 0em;
+  --_typography---sm--font-size: var(--_sizes---fixed--regular);
+  --_typography---sm--line-height: 1.5;
+  --_typography---sm--letter-spacing: -.01em;
+  --_typography---base--font-size: var(--_sizes---fixed--medium);
+  --_typography---base--line-height: 1.6;
+  --_typography---base--letter-spacing: -.01em;
+  --_typography---lg--font-size: var(--_sizes---fixed--large);
+  --_typography---lg--line-height: 1.5;
+  --_typography---lg--font-weight: var(--_typography---font-weight--medium);
+  --_typography---lg--letter-spacing: -.01em;
+  --_typography---xl--font-size: var(--_sizes---fixed--xlarge);
+  --_typography---xl--line-height: 1.33;
+  --_typography---xl--font-weight: var(--_typography---font-weight--medium);
+  --_typography---xl--letter-spacing: -.02em;
+  --_typography---2xl--font-size: var(--_sizes---fixed--huge);
+  --_typography---2xl--line-height: 1.33;
+  --_typography---2xl--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---2xl--letter-spacing: -.03em;
+  --_typography---3xl--font-size: 2.25rem;
+  --_typography---3xl--line-height: 1.2;
+  --_typography---3xl--font-weight: var(--_typography---font-weight--bold);
+  --_typography---3xl--letter-spacing: -.03em;
+  --_typography---4xl--font-size: var(--_sizes---fixed--xhuge);
+  --_typography---4xl--line-height: 1.2;
+  --_typography---4xl--letter-spacing: -.04em;
+  --_typography---5xl--font-size: 4.5rem;
+  --_typography---5xl--line-height: 1.1;
+  --_typography---5xl--font-weight: var(--_typography---font-weight--bold);
+  --_typography---5xl--letter-spacing: -.04em;
+
+  /* --- Botões ----------------------------------------------------------- */
+  --_typography---button--font-family: var(--_typography---font-family--alternate);
+  --_typography---button--font-size: var(--_sizes---fixed--medium);
+  --_typography---button--line-height: 1.5;
+  --_typography---button--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---button--letter-spacing: .08em;
+
+  /* --- Espaçamento (grid de 8px) ---------------------------------------- */
+  --_sizes---fixed--none: 0rem;
+  --_sizes---fixed--tiny: .125rem;
+  --_sizes---fixed--xxsmall: .25rem;
+  --_sizes---fixed--xsmall: .5rem;
+  --_sizes---fixed--small: .75rem;
+  --_sizes---fixed--regular: .875rem;
+  --_sizes---fixed--medium: 1rem;
+  --_sizes---fixed--large: 1.25rem;
+  --_sizes---fixed--xlarge: 1.5rem;
+  --_sizes---fixed--xxlarge: 1.75rem;
+  --_sizes---fixed--huge: 2rem;
+  --_sizes---fixed--xhuge: 2.5rem;
+  --_sizes---fixed--xxhuge: 3rem;
+  --_sizes---padding-section--small: 2rem;
+  --_sizes---padding-section--medium: 4rem;
+  --_sizes---padding-section--large: 4.5rem;
+  --new-base_sizes---fixed--0-75rem: .75rem;
+  --new-base_typography---xs--font-size: var(--new-base_sizes---fixed--0-75rem);
+  --new-base_typography---font-weight--semibold: 600;
+}
+
+/* ============================================================================
+   Identidade tipográfica — declarada em `body`, não em `:root`.
+
+   Por quê: o webflow.css redeclara os tokens de tipografia em blocos
+   `@media (max-width: 991px|767px|479px) { body { … } }`. Como `body` e `:root`
+   são elementos diferentes, isso não é disputa de especificidade — é herança:
+   tudo dentro do body herda do body, então aqueles blocos venceriam o `:root`
+   acima em telas menores e a fonte voltaria a ser Plus Jakarta Sans no mobile.
+
+   Repetindo aqui em `body` (e o tokens.css carregando depois do webflow.css),
+   a identidade fica constante em todos os breakpoints.
+
+   ATENÇÃO: nada de `font-size` neste bloco. Os tamanhos DEVEM continuar vindo
+   dos blocos responsivos do webflow.css — h1 vai de 3.75rem a 2.75rem conforme
+   a tela. Fixar tamanho aqui quebraria a tipografia no mobile.
+   ============================================================================ */
+body {
+  /* Famílias */
+  --_typography---font-family--body: Manrope, Arial, Helvetica, sans-serif;
+  --_typography---font-family--headers: Manrope, Arial, Helvetica, sans-serif;
+  --_typography---font-family--alternate: Manrope, Arial, Helvetica, sans-serif;
+
+  /* Pesos */
+  --_typography---font-weight--thin: 100;
+  --_typography---font-weight--extra-light: 200;
+  --_typography---font-weight--light: 300;
+  --_typography---font-weight--regular: 400;
+  --_typography---font-weight--medium: 500;
+  --_typography---font-weight--semibold: 600;
+  --_typography---font-weight--bold: 700;
+  --_typography---font-weight--extra-bold: 800;
+  --_typography---font-weight--black: 900;
+
+  /* Títulos — Bold 700 conforme o guia */
+  --_typography---h1--font-family: var(--_typography---font-family--headers);
+  --_typography---h1--font-weight: var(--_typography---font-weight--bold);
+  --_typography---h1--line-height: 1.15;
+  --_typography---h1--letter-spacing: -.04em;
+  --_typography---h2--font-family: var(--_typography---font-family--headers);
+  --_typography---h2--font-weight: var(--_typography---font-weight--bold);
+  --_typography---h2--line-height: 1.2;
+  --_typography---h2--letter-spacing: -.03em;
+  --_typography---h3--font-family: var(--_typography---font-family--headers);
+  --_typography---h3--font-weight: var(--_typography---font-weight--bold);
+  --_typography---h3--line-height: 1.4;
+  --_typography---h3--letter-spacing: -.02em;
+  --_typography---h4--font-family: var(--_typography---font-family--headers);
+  --_typography---h4--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---h4--line-height: 1.2;
+  --_typography---h4--letter-spacing: 0em;
+  --_typography---h5--font-family: var(--_typography---font-family--headers);
+  --_typography---h5--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---h5--line-height: 1.15;
+  --_typography---h5--letter-spacing: 0em;
+  --_typography---h6--font-family: var(--_typography---font-family--headers);
+  --_typography---h6--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---h6--line-height: 1.2;
+  --_typography---h6--letter-spacing: 0em;
+
+  /* Escala de corpo */
+  --_typography---xs--line-height: 1.5;
+  --_typography---xs--letter-spacing: 0em;
+  --_typography---sm--line-height: 1.5;
+  --_typography---sm--letter-spacing: -.01em;
+  --_typography---base--line-height: 1.6;
+  --_typography---base--letter-spacing: -.01em;
+  --_typography---lg--line-height: 1.5;
+  --_typography---lg--font-weight: var(--_typography---font-weight--medium);
+  --_typography---lg--letter-spacing: -.01em;
+  --_typography---xl--line-height: 1.33;
+  --_typography---xl--font-weight: var(--_typography---font-weight--medium);
+  --_typography---xl--letter-spacing: -.02em;
+  --_typography---2xl--line-height: 1.33;
+  --_typography---2xl--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---2xl--letter-spacing: -.03em;
+  --_typography---3xl--line-height: 1.2;
+  --_typography---3xl--font-weight: var(--_typography---font-weight--bold);
+  --_typography---3xl--letter-spacing: -.03em;
+  --_typography---4xl--line-height: 1.2;
+  --_typography---4xl--letter-spacing: -.04em;
+  --_typography---5xl--line-height: 1.1;
+  --_typography---5xl--font-weight: var(--_typography---font-weight--bold);
+  --_typography---5xl--letter-spacing: -.04em;
+
+  /* Botões */
+  --_typography---button--font-family: var(--_typography---font-family--alternate);
+  --_typography---button--font-weight: var(--_typography---font-weight--semibold);
+  --_typography---button--line-height: 1.5;
+  --_typography---button--letter-spacing: .08em;
+}

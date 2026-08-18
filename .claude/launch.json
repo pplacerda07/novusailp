@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "novus-site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "1783305688219-P_GINA_2_EAGLE/aeline/aeline"
+      ],
+      "port": 4321
+    }
+  ]
+}

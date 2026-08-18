@@ -1,0 +1,48 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navbar from "../../components/Navbar.astro";
+import Footer from "../../components/Footer.astro";
+import CtaSection from "../../components/CtaSection.astro";
+import TeamMemberHero from "../../components/TeamMemberHero.astro";
+
+export async function getStaticPaths() {
+  const workers = await getCollection("workers");
+  return workers.map((w) => ({ params: { slug: w.id }, props: { worker: w } }));
+}
+
+const { worker } = Astro.props;
+const { name, role, summary } = worker.data;
+
+const siteUrl = (Astro.site?.toString() ?? "").replace(/\/$/, "");
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const sameAs = [worker.data.linkedin, worker.data.twitter, worker.data.instagram].filter(Boolean);
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name,
+  jobTitle: role,
+  description: summary,
+  image: new URL(worker.data.photo, Astro.site).toString(),
+  worksFor: { "@id": `${siteUrl}/#organization` },
+  url,
+  ...(sameAs.length ? { sameAs } : {}),
+};
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: `${siteUrl}/` },
+    { "@type": "ListItem", position: 2, name: "Sobre nos", item: `${siteUrl}/about/` },
+    { "@type": "ListItem", position: 3, name, item: url },
+  ],
+};
+---
+<BaseLayout title={`${name} - ${role} | Novus AI`} description={summary} jsonLd={[personSchema, breadcrumb]}>
+  <Navbar variant="secondary" />
+  <main class="main-wrapper">
+    <TeamMemberHero worker={worker.data} />
+    <CtaSection />
+    <Footer />
+  </main>
+</BaseLayout>

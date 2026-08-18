@@ -1,0 +1,126 @@
+---
+// Footer — compartilhado por todas as páginas.
+// Structure: footer_wrap dark card + footer_top 2-col + footer_right 3-col.
+// Nav links point to the site pages. Newsletter form is a stub (no action).
+// Privacidade/Termos links currently resolve to "/"; year is rendered dynamically.
+
+import { whatsappLink } from "../lib/whatsapp";
+
+// Mesmas âncoras do menu: as seções do template saíram da home e os antigos
+// #produtos, #sobre e #faq não existem mais.
+const pages = [
+  { href: "/", label: "Início" },
+  { href: "/#como-funciona", label: "Como funciona" },
+  { href: "/#diferenciais", label: "Diferenciais" },
+];
+const company = [
+  { href: "/#depoimentos", label: "Depoimentos" },
+  { href: "/#conteudos", label: "Conteúdos" },
+  { href: "/contact", label: "Contato" },
+];
+// TODO: Instagram e LinkedIn ainda apontam para "#", ou seja, não levam a lugar
+// nenhum. Falta a URL dos dois perfis.
+const social = [
+  { href: "#", label: "Instagram" },
+  { href: "#", label: "LinkedIn" },
+  { href: whatsappLink(), label: "WhatsApp" },
+];
+const year = 2026;
+---
+
+<footer class="footer">
+  <div class="padding-global is-footer">
+    <div class="container-full">
+      <div class="footer_wrap">
+        <div class="footer_top">
+          <div class="footer_content">
+            <div class="footer_content-wrap">
+              <a href="/" aria-label="Novus AI, home" class="w-inline-block">
+                <img src="/images/novus-logo-branco.png" width="439" height="96" loading="lazy" alt="" class="footer_logo" />
+              </a>
+              <div>
+                A Novus AI conecta tecnologia e resultado. Agentes de IA conversacionais
+                via WhatsApp para PMEs que qualificam e vendem 24/7.
+              </div>
+            </div>
+            <div class="footer_content-wrap">
+              <div>Inscreva-se na newsletter</div>
+              <div class="form-block w-form">
+                <form name="email-form" data-name="Email Form" class="footer-form">
+                  <input
+                    class="text-field w-input"
+                    maxlength="256"
+                    name="email"
+                    placeholder="Seu melhor e-mail"
+                    type="email"
+                    required
+                  />
+                  <button type="enviar" class="button-arrow" aria-label="Subscribe">
+                    <div class="button-arrow_wrap">
+                      <div class="button-arrow_text hide-mobile-portrait">
+                        <div class="text_button">Enviar</div>
+                      </div>
+                      <div class="button_container-arrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 20 20" fill="none" class="icon-1x1-main">
+                          <path
+                            d="M13.0457 8.13128L5.8733 15.3037L4.69479 14.1252L11.8672 6.95277L5.54568 6.95277L5.54568 5.28636H14.7121V14.4528L13.0457 14.4528V8.13128Z"
+                            fill="currentColor"></path>
+                        </svg>
+                      </div>
+                      <div class="button-arrow_bg"></div>
+                    </div>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="footer_right">
+            <div class="footer_links">
+              {
+                pages.map((l) => (
+                  <a href={l.href} class="footer_link w-inline-block">
+                    <div>{l.label}</div>
+                  </a>
+                ))
+              }
+            </div>
+            <div class="footer_links">
+              {
+                company.map((l) => (
+                  <a href={l.href} class="footer_link w-inline-block">
+                    <div>{l.label}</div>
+                  </a>
+                ))
+              }
+            </div>
+            <div class="footer_links">
+              {
+                social.map((l) => (
+                  <a
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener"
+                    class="footer_link w-inline-block"
+                  >
+                    <div>{l.label}</div>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+        <div class="footer_bottom">
+          <div class="footer_bottom-links">
+            <a href="/" class="footer_bottom-link w-inline-block">
+              <div class="text-sm">Política de privacidade</div>
+            </a>
+            <a href="/" class="footer_bottom-link w-inline-block">
+              <div class="text-sm">Exclusão de dados</div>
+            </a>
+          </div>
+          <div class="text-color-on-secondary">© {year} Novus AI. Todos os direitos reservados. Brasil</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

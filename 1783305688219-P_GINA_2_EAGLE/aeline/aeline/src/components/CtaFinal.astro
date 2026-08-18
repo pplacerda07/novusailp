@@ -1,0 +1,52 @@
+---
+// CtaFinal — último bloco antes do rodapé.
+//
+// A arte de fundo já traz o robô à esquerda e o dado dos 76% à direita, então o
+// texto ocupa só a coluna da esquerda: a headline em cima do robô e o botão
+// embaixo dele, deixando o meio livre para a ilustração aparecer.
+//
+// Substitui o CtaSection do template, que ainda usava foto de céu com capim e a
+// prova social inventada ("Mais de 8 segmentos atendidos" com avatares de banco
+// de imagem).
+
+import { whatsappLink } from "../lib/whatsapp";
+---
+
+<section class="cf-section">
+  <!-- `padding-global is-cta` é o mesmo recuo usado pelo cartão de CTA do
+       template: a arte fica num cartão arredondado, encostado nas bordas por
+       uma margem fina, e não sangrando de ponta a ponta da tela. -->
+  <div class="padding-global is-cta">
+    <div data-reveal="scale" class="cf-card">
+      <!-- A arte entra como <img> e não como background-image: assim ela
+           participa do srcset e o navegador baixa a versão do tamanho da tela.
+           Como background, baixaria sempre a maior. -->
+      <img
+        src="/images/footer-bg.avif"
+        srcset="/images/footer-bg-800.avif 800w, /images/footer-bg-1280.avif 1280w, /images/footer-bg.avif 1920w"
+        sizes="100vw"
+        width="1920"
+        height="1080"
+        loading="lazy"
+        decoding="async"
+        alt=""
+        class="cf-arte"
+      />
+
+      <div class="cf-coluna">
+        <h2 class="cf-headline">
+          Se chegou até aqui, é porque tá interessado. Então vai conversar com o
+          agente e tirar suas próprias conclusões.
+        </h2>
+
+        <div class="cf-cta">
+          <a href={whatsappLink()} target="_blank" rel="noopener" class="button is-hero-invert is-grande w-inline-block">
+            <div class="text-button-wrap">
+              <div>Quero me impressionar</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

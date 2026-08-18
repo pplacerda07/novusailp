@@ -1,0 +1,57 @@
+---
+// Depoimento — prova social em vídeo, logo depois da seção de custo do chatbot.
+//
+// A caixa é um marcador: o vídeo do cliente ainda vai ser gravado. Ela já tem a
+// proporção final (16:9), então quando o arquivo chegar nada no layout se mexe.
+// Como trocar está anotado no slot, mais abaixo.
+//
+// Sobre a copy: o título fala em economia, mas nenhum número aparece aqui de
+// propósito. Número sem comprovação é justamente o que o documento de copy
+// proíbe, e quem dá o valor é o cliente, falando no vídeo.
+---
+
+<section class="rv-section">
+  <div class="padding-global">
+    <div class="container-large">
+
+      <h2 data-reveal class="rv-headline">
+        Como nossos clientes economizaram
+      </h2>
+
+      <p data-reveal class="rv-lead">
+        Não somos nós dizendo. É quem já usa o <strong class="nome-produto">VendeAI</strong>
+        contando o que mudou no atendimento e na conta do fim do mês.
+      </p>
+
+      <!-- ============================================================
+           SLOT DO VÍDEO
+
+           Quando a gravação estiver pronta, troque o bloco .rv-poster por:
+
+             <video class="rv-player" controls playsinline
+                    poster="/images/depoimento-capa.avif">
+               <source src="/videos/depoimento-cliente.mp4" type="video/mp4" />
+             </video>
+
+           Vale subir também uma imagem de capa (poster): sem ela o player
+           aparece preto até a pessoa dar play.
+           ============================================================ -->
+      <div data-reveal="scale" class="rv-video">
+        <div class="rv-poster">
+          <span class="rv-play" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 6.5v11a1 1 0 0 0 1.5.87l9-5.5a1 1 0 0 0 0-1.74l-9-5.5A1 1 0 0 0 9 6.5Z" />
+            </svg>
+          </span>
+          <span class="rv-poster_txt">Depoimento em vídeo</span>
+        </div>
+      </div>
+
+      <!-- TODO: trocar pelo nome e segmento reais quando o vídeo for gravado. -->
+      <p data-reveal class="rv-legenda">
+        Nome do cliente <span aria-hidden="true">·</span> Segmento da empresa
+      </p>
+
+    </div>
+  </div>
+</section>

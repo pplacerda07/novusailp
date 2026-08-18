@@ -1,0 +1,73 @@
+---
+// Conteudos — chamada curta para o blog.
+//
+// A seção existe para SEO e GEO: dá ao site um ponto de entrada indexável e
+// mostra às ferramentas de busca (e aos motores de resposta) que existe
+// material próprio sobre o assunto. Por isso é enxuta: quem lê a home está no
+// funil de venda, não de leitura. O texto longo mora na página do artigo.
+
+// TODO: os artigos ainda não existem. Enquanto isso os três levam para o índice
+// do blog. Quando forem escritos, trocar o href de cada um pelo slug real.
+const temas = [
+  {
+    tag: "Mercado",
+    titulo: "Quanto custa deixar um lead esperando no WhatsApp",
+    href: "/blog",
+  },
+  {
+    tag: "Tecnologia",
+    titulo: "API oficial ou WhatsApp Web: o que muda para o seu número",
+    href: "/blog",
+  },
+  {
+    tag: "Operação",
+    titulo: "Como treinar uma IA com o material que a empresa já tem",
+    href: "/blog",
+  },
+];
+---
+
+<section class="ct-section">
+  <div class="padding-global">
+    <div class="container-large">
+
+      <div class="ct-topo">
+        <!-- A quebra é explícita e cai no fim da primeira frase, que é onde a
+             leitura pede. Some abaixo de 992px, onde não cabem duas linhas. -->
+        <h2 data-reveal class="ct-headline">
+          Agentes de IA estão mudando o mercado.<br class="ct-br" />
+          Saiba como essa tecnologia pode afetar a sua empresa.
+        </h2>
+        <p data-reveal class="ct-lead">
+          Escrito e pesquisado pelo time da <strong class="nome-produto">Novus</strong>.
+          De empresário para empresário, sem jargão.
+        </p>
+      </div>
+
+      <ul class="ct-cards" data-stagger>
+        {temas.map((t) => (
+          <li>
+            <a class="ct-card" href={t.href}>
+              <span class="ct-tag">{t.tag}</span>
+              <h3 class="ct-titulo">{t.titulo}</h3>
+              <span class="ct-seta" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none">
+                  <path d="M13.0457 8.13128L5.8733 15.3037L4.69479 14.1252L11.8672 6.95277L5.54568 6.95277L5.54568 5.28636H14.7121V14.4528L13.0457 14.4528V8.13128Z" fill="currentColor" />
+                </svg>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div data-reveal class="ct-cta">
+        <a href="/blog" class="button is-hero-invert w-inline-block">
+          <div class="text-button-wrap">
+            <div>Ver todos os conteúdos</div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>

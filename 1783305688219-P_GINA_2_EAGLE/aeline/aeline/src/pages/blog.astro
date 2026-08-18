@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import BlogHero from "../components/BlogHero.astro";
+import BlogGrid from "../components/BlogGrid.astro";
+---
+<BaseLayout title="Blog — Novus AI" description="Ideias recentes e tendencias. Se voce’re esta melhorando o presente ou preparando o futuro, ajudamos sua equipe a avancar com confianca.">
+  <Navbar variant="secondary" />
+  <main class="main-wrapper">
+    <BlogHero /><BlogGrid />
+    <Footer />
+  </main>
+</BaseLayout>

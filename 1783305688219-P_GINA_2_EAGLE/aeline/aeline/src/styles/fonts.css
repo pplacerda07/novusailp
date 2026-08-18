@@ -1,0 +1,9 @@
+/* Manrope — tipografia oficial da Novus AI (brand guide v1.0).
+   Títulos Bold 700 · corpo Regular 400 / Medium 500.
+   Fallback definido no guia: Arial, Helvetica, sans-serif.
+   Auto-hospedada via @fontsource (nada de CDN externo). */
+@import "@fontsource/manrope/400.css";
+@import "@fontsource/manrope/500.css";
+@import "@fontsource/manrope/600.css";
+@import "@fontsource/manrope/700.css";
+@import "@fontsource/manrope/800.css";

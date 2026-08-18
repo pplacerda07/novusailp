@@ -1,0 +1,65 @@
+---
+// WhatsAppPopup — botão flutuante que abre um cartão de conversa.
+// Fica em todas as páginas (carregado no BaseLayout).
+
+// O número e a mensagem vivem em src/lib/whatsapp.ts, junto com os outros CTAs
+// do site.
+import { whatsappLink } from "../lib/whatsapp";
+
+const href = whatsappLink();
+---
+
+<div class="wa" data-wa>
+
+  <!-- Cartão. Começa com o atributo hidden: sem JS ele nunca aparece, e o
+       botão continua funcionando como link para a conversa. -->
+  <div class="wa_card" data-wa-card hidden role="dialog" aria-label="Conversa no WhatsApp">
+    <div class="wa_topo">
+      <span class="wa_avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1a12 12 0 0 1-5.7-4.9c-.4-.7-.7-1.5-.7-2.2 0-.8.4-1.4.7-1.7.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .5.4l.7 1.7c.1.2 0 .4-.1.5l-.3.4c-.1.1-.2.3-.1.5.3.6 1 1.6 2.1 2.2.3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.6.8c.2.1.3.2.3.3.1.2.1.6-.2 1.2Z" />
+        </svg>
+      </span>
+      <span class="wa_id">
+        <strong>Novus AI</strong>
+        <small><i aria-hidden="true"></i>Responde na hora</small>
+      </span>
+      <button type="button" class="wa_fechar" data-wa-fechar aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="wa_corpo">
+      <p class="wa_balao">
+        Oi! Pode escrever do seu jeito. O agente responde, tira dúvidas e agenda
+        o próximo passo.
+      </p>
+    </div>
+
+    <a class="wa_acao" href={href} target="_blank" rel="noopener">
+      Abrir conversa
+    </a>
+  </div>
+
+  <button
+    type="button"
+    class="wa_toggle"
+    data-wa-toggle
+    aria-expanded="false"
+    aria-label="Abrir conversa no WhatsApp"
+  >
+    <svg class="wa_icone is-whats" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1a12 12 0 0 1-5.7-4.9c-.4-.7-.7-1.5-.7-2.2 0-.8.4-1.4.7-1.7.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .5.4l.7 1.7c.1.2 0 .4-.1.5l-.3.4c-.1.1-.2.3-.1.5.3.6 1 1.6 2.1 2.2.3.2.5.1.6 0l.5-.6c.2-.2.3-.2.5-.1l1.6.8c.2.1.3.2.3.3.1.2.1.6-.2 1.2Z" />
+    </svg>
+    <svg class="wa_icone is-fechar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  </button>
+
+</div>
+
+<script>
+  import "../scripts/whatsapp-popup.ts";
+</script>

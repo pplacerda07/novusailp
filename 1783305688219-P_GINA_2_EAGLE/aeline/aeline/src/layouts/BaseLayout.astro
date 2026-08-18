@@ -1,0 +1,157 @@
+---
+// BaseLayout — ordem da cascata: fonts → normalize → webflow → tokens → global-styles → components.
+// tokens.css vem DEPOIS do webflow.css de propósito: o webflow.css declara um :root
+// próprio (linha ~1809) com a paleta original do template Eagle. Como as duas regras
+// têm a mesma especificidade, quem carrega por último vence — então o tokens.css
+// precisa vir depois para a paleta Novus valer.
+// global-styles continua depois do webflow para suas regras !important prevalecerem.
+import "../styles/fonts.css";
+import "../styles/normalize.css";
+import "../styles/webflow.css";
+import "../styles/tokens.css";
+import "../styles/global-styles.css";
+import "../styles/hamburger-nav.css";
+import "../styles/components.css";
+import WhatsAppPopup from "../components/WhatsAppPopup.astro";
+import { WHATSAPP_EXIBICAO } from "../lib/whatsapp";
+
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  ogType?: "website" | "article";
+  noindex?: boolean;
+  /** Extra JSON-LD schema object(s) for this page (Article/Service/Person/Breadcrumb…). */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  image = "/images/og-default.webp",
+  ogType = "website",
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = new URL(image, Astro.site).toString();
+
+// --- Structured data (JSON-LD) ---
+const siteUrl = (Astro.site?.toString() ?? "").replace(/\/$/, "");
+const orgLogo = new URL("/images/novus-logo-azul.png", Astro.site).toString();
+
+// Emitido em toda página; os schemas por página referenciam estes pelo @id.
+const baseSchema: Record<string, unknown>[] = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${siteUrl}/#organization`,
+    name: "Novus AI",
+    url: `${siteUrl}/`,
+    logo: orgLogo,
+    description:
+      "Agentes de IA conversacionais via WhatsApp para PMEs que atendem, qualificam e agendam 24 horas por dia.",
+    // Telefone e endereço ajudam a busca local e o painel de conhecimento.
+    telephone: WHATSAPP_EXIBICAO,
+    areaServed: "BR",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      telephone: WHATSAPP_EXIBICAO,
+      availableLanguage: "pt-BR",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    name: "Novus AI",
+    url: `${siteUrl}/`,
+    inLanguage: "pt-BR",
+    publisher: { "@id": `${siteUrl}/#organization` },
+  },
+  // SoftwareApplication descreve o produto em si. É o schema que os motores de
+  // resposta usam para entender o que a Novus vende, não só quem ela é.
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${siteUrl}/#vendeai`,
+    name: "VendeAI",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web, WhatsApp",
+    inLanguage: "pt-BR",
+    publisher: { "@id": `${siteUrl}/#organization` },
+    description:
+      "Agente de IA que atende pelo WhatsApp, responde dúvidas com as informações da empresa, qualifica o contato e agenda o próximo passo.",
+  },
+];
+
+const extraSchema = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const schemas = [...baseSchema, ...extraSchema];
+// Escape `<` so a JSON string value can never break out of the <script> tag.
+const ld = (obj: Record<string, unknown>) =>
+  JSON.stringify(obj).replace(/</g, "\\u003c");
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    {
+      /* max-image-preview:large libera a miniatura grande no resultado de busca;
+         max-snippet:-1 tira o limite de tamanho do trecho citado, que é o que os
+         motores de resposta usam. */
+      !noindex && (
+        <meta
+          name="robots"
+          content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+        />
+      )
+    }
+    <meta name="theme-color" content="#015EFD" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Novus AI" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pt_BR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Structured data -->
+    {schemas.map((s) => <script type="application/ld+json" set:html={ld(s)} />)}
+  </head>
+  <body>
+    <!-- page-wrapper: webflow.css applies overflow:clip here -->
+    <div class="page-wrapper">
+      <slot />
+    </div>
+    <!-- Fora do page-wrapper de propósito: ele tem overflow clip, que recortaria
+         um elemento de posição fixa no canto da tela. -->
+    <WhatsAppPopup />
+    <!-- Animation layer: data-anim engine + hero/revelars + marquee + counters + Swiper. -->
+    <script>
+      import "../scripts/animations.ts";
+      import "../scripts/swiper-init.ts";
+    </script>
+  </body>
+</html>

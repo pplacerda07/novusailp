@@ -1,0 +1,105 @@
+---
+// Decisoes — cartões empilhados que giram e se despedem conforme o scroll.
+//
+// Adaptado do componente de referência (sticky cards). Mudanças de fundo:
+//   · Sem Lenis. O original usava a lib para suavizar o scroll, mas ela
+//     sequestra o scroll da página inteira e afetaria a seção de ícones (que
+//     também é pinada), todos os outros ScrollTriggers e o widget flutuante.
+//     A animação funciona sem: o que se perde é a suavização global, que não é
+//     parte deste componente.
+//   · Sem ionicons por CDN. Os ícones são SVG inline, como no resto do site.
+//   · Pin encurtado de 700svh para 460svh. Somado às 4 telas da seção de
+//     ícones, o original deixaria 11 telas presas numa página de 18.
+//   · Seletores com prefixo dc- e regras presas à seção. O CSS original
+//     estilizava `section`, `h1`, `h3`, `p` e `span` no geral, o que vazaria
+//     para o site todo.
+
+const frente = {
+  titulo: "Chamando o responsável",
+  etiqueta: "Ao vivo",
+  texto: "Role para ver o que o agente manda direto para o seu WhatsApp.",
+};
+
+const cartoes = [
+  {
+    id: "dc-1",
+    titulo: "Pediu desconto",
+    texto:
+      "O cliente pediu condição especial. Você recebe no seu WhatsApp pessoal com o print da conversa e o que ele quer.",
+    icone: "etiqueta",
+  },
+  {
+    id: "dc-2",
+    titulo: "Quer negociar",
+    texto:
+      "Quando a proposta sai do que foi configurado, o agente não inventa. Ele para e passa para você decidir.",
+    icone: "aperto",
+  },
+  {
+    id: "dc-3",
+    titulo: "Lead quente agora",
+    texto:
+      "Perfil certo e intenção de compra. A notificação chega na hora, com o resumo do que a pessoa procura.",
+    icone: "chama",
+  },
+  {
+    id: "dc-4",
+    titulo: "Só você resolve",
+    texto:
+      "Prazo apertado, pedido fora do padrão, cliente antigo voltando. O agente entrega o contexto e sai do caminho.",
+    icone: "sino",
+  },
+];
+
+const icones: Record<string, string> = {
+  etiqueta:
+    'M20 12.5 12.5 20a2 2 0 0 1-2.8 0l-6-6a2 2 0 0 1-.6-1.4V5a2 2 0 0 1 2-2h7.6a2 2 0 0 1 1.4.6l6 6a2 2 0 0 1 0 2.9Z',
+  aperto: 'M8 12 3 7l4-4 4 4M16 12l5 5-4 4-4-4M7 17l10-10',
+  chama:
+    'M12 3c.4 3-1.2 4.4-2.6 5.8C8 10.2 7 11.6 7 14a5 5 0 0 0 10 0c0-2-1-3.5-2-5 0 1.2-.6 2-1.5 2 .5-3-1-6.5-1.5-8Z',
+  sino: 'M18 9a6 6 0 1 0-12 0c0 5-2 6.5-2 6.5h16S18 14 18 9ZM10.5 19.5a2 2 0 0 0 3 0',
+};
+---
+
+<section class="dc-section">
+
+  <!-- Frase de impacto. Sobe e sai de cena conforme os cartões entram. -->
+  <div class="dc-frase">
+    <h2>
+      Tem decisões que só o dono ou o gerente pode tomar. A
+      <strong class="nome-produto">Novus</strong> já pensou nisso.
+    </h2>
+  </div>
+
+  <div class="dc-baralho">
+
+    <!-- Capa: é o que aparece antes do giro. -->
+    <article class="dc-card dc-card--frente">
+      <h3>{frente.titulo}</h3>
+      <span class="dc-etiqueta">{frente.etiqueta}</span>
+      <p>{frente.texto}</p>
+      <span class="dc-seta" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M6 13l6 6 6-6" />
+        </svg>
+      </span>
+    </article>
+
+    {cartoes.map((c) => (
+      <article class={`dc-card dc-card--verso ${c.id}`}>
+        <h3>{c.titulo}</h3>
+        <span class="dc-icone" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d={icones[c.icone]} />
+          </svg>
+        </span>
+        <p>{c.texto}</p>
+      </article>
+    ))}
+
+  </div>
+</section>
+
+<script>
+  import "../scripts/decisoes.ts";
+</script>

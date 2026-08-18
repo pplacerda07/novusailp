@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import Hero from "../components/Hero.astro";
+import ScrollIcons from "../components/ScrollIcons.astro";
+import Treinamento from "../components/Treinamento.astro";
+import Garantias from "../components/Garantias.astro";
+import ChatbotContrast from "../components/ChatbotContrast.astro";
+import Depoimento from "../components/Depoimento.astro";
+import Decisoes from "../components/Decisoes.astro";
+import Conteudos from "../components/Conteudos.astro";
+import CtaFinal from "../components/CtaFinal.astro";
+import Faq from "../components/Faq.astro";
+import { faq } from "../lib/faq";
+
+// FAQPage: é o schema que faz as perguntas aparecerem expandidas no resultado
+// de busca e que os motores de resposta usam para citar a fonte. Vem do mesmo
+// arquivo que alimenta a seção visível, então nunca divergem.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((f) => ({
+    "@type": "Question",
+    name: f.pergunta,
+    acceptedAnswer: { "@type": "Answer", text: f.resposta },
+  })),
+};
+
+// As seções que sobraram do template Eagle saíram da home: About, Services,
+// Expertise, Pricing, TestimonialsSection, CardsLoop, BlogsSection e LogoLoop.
+// Os arquivos continuam em src/components/ porque as rotas /about, /services,
+// /pricing e /blog ainda os usam. Apagar os componentes derrubaria essas
+// páginas; quando elas forem refeitas ou removidas, aí sim dá para apagar.
+---
+<BaseLayout
+  title="Novus AI | Agentes de IA que atendem e vendem pelo WhatsApp"
+  description="Agentes de IA configurados para o seu negócio. Atendem pelo WhatsApp, tiram dúvidas, qualificam oportunidades e agendam o próximo passo, 24 horas por dia. Parceiro oficial Meta, sem cobrança por token."
+  jsonLd={faqSchema}
+>
+  <Navbar variant="base" />
+  <main class="main-wrapper">
+    <Hero />
+    <ScrollIcons />
+    <div id="como-funciona"><Treinamento /></div>
+    <div id="diferenciais"><Garantias /></div>
+    <ChatbotContrast />
+    <div id="depoimentos"><Depoimento /></div>
+    <Decisoes />
+    <div id="conteudos"><Conteudos /></div>
+    <div id="faq"><Faq /></div>
+    <CtaFinal />
+    <Footer />
+  </main>
+</BaseLayout>

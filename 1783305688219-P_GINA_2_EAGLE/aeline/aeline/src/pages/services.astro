@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import ServicosHero from "../components/ServicesHero.astro";
+import ServicosList from "../components/ServicesList.astro";
+import ServicosWhy from "../components/ServicesWhy.astro";
+import ServicosTesti from "../components/ServicesTesti.astro";
+import CtaSection from "../components/CtaSection.astro";
+---
+<BaseLayout title="Planos e Serviços — Novus AI" description="Da estratégia à implementação, criamos soluções com impacto mensurável. Explore nossos planos e agentes de Inteligência Artificial.">
+  <Navbar variant="secondary" />
+  <main class="main-wrapper">
+    <ServicosHero /><ServicosList /><ServicosWhy /><ServicosTesti /><CtaSection />
+    <Footer />
+  </main>
+</BaseLayout>

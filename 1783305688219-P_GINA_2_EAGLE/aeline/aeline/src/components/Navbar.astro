@@ -1,0 +1,124 @@
+---
+// Navbar — compartilhado por todas as páginas.
+// Desktop (≥992): uses the base classes .navbar / .navbar_content /
+//   .nav_links / .button.
+// Variants:
+//   base      → home: transparent, position:absolute over the hero, white text + logo.
+//   secondary → other pages: in flow (relative), black text + logo on a light background.
+// Mobile/tablet (≤991): scaling hamburger menu — a pill that expands to a card,
+//   CSS-only via <html data-navigation-status>, fully accessible. Driven by
+//   src/scripts/navbar.ts; styles in src/styles/hamburger-nav.css; themed in components.css.
+// A single `navLinks` array feeds both desktop and hamburger. Inicio is omitted (logo → /)
+// and Contato is omitted (the "Fale conosco" button already links to /contact).
+
+import { whatsappLink } from "../lib/whatsapp";
+
+interface Props {
+  variant?: "base" | "secondary";
+}
+const { variant = "base" } = Astro.props;
+const V = "w-variant-b70328b2-1dfd-ba7a-c1d1-5c2a5b388d0d";
+const vc = variant === "secondary" ? ` ${V}` : "";
+
+// As âncoras precisam existir na home. Ao remover as seções do template, os
+// antigos #produtos, #sobre e #faq ficaram sem destino e o link não levava a
+// lugar nenhum. Esta lista reflete as seções que a home realmente tem.
+const navLinks = [
+  { href: "/#como-funciona", label: "Como funciona" },
+  { href: "/#diferenciais", label: "Diferenciais" },
+  { href: "/#depoimentos", label: "Depoimentos" },
+  { href: "/#conteudos", label: "Conteúdos" },
+];
+
+const current = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isCurrent = (href: string) => current === (href.replace(/\/$/, "") || "/");
+---
+
+<div class={`navbar${vc}`} data-navbar role="banner">
+  <div class={`padding-global is-navbar${vc}`}>
+    <div class="container-large">
+      <div class="navbar_content">
+        <a href="/" aria-label="Novus AI, home" class={`navbar_logo-link w-inline-block${vc}`}>
+          <img src="/images/novus-logo-branco.png" width="439" height="96" loading="eager" alt="" class={`navbar_logo${vc}`} />
+          <img src="/images/novus-logo-azul.png" width="439" height="96" loading="eager" alt="" class={`navbar_logo is-black${vc}`} />
+        </a>
+
+        <!-- Desktop links (≥992) -->
+        <div class="nav_wrap">
+          <nav role="navigation" class={`nav_mobile${vc}`} aria-label="Primary">
+            <div class={`navbar_list${vc}`}>
+              {
+                navLinks.map((l) => (
+                  <a
+                    href={l.href}
+                    aria-current={isCurrent(l.href) ? "page" : undefined} class="nav_links"
+                  >
+                    {l.label}
+                  </a>
+                ))
+              }
+            </div>
+          </nav>
+        </div>
+
+        <div class="nav_buttons-wrap">
+          <div class="login-wrap hide-mobile-landscape">
+            <a href={whatsappLink()} target="_blank" rel="noopener" class="button w-inline-block">
+              <div class="text-button-wrap">
+                <div>Falar com especialista</div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Hamburger (≤991) — pill that scales to a card. CSS-only via data-navigation-status. -->
+          <div class="hamburger-anchor">
+            <div class="hamburger-nav">
+              <div class="hamburger-nav__bg" aria-hidden="true"></div>
+              <div class="hamburger-nav__group">
+                <p class="hamburger-nav__menu-p">Menu</p>
+                <ul class="hamburger-nav__ul">
+                  {
+                    navLinks.map((l) => (
+                      <li class="hamburger-nav__li">
+                        <a
+                          href={l.href}
+                          aria-current={isCurrent(l.href) ? "page" : undefined} class="hamburger-nav__a"
+                        >
+                          <p class="hamburger-nav__p">{l.label}</p>
+                          <div class="hamburger-nav__dot" aria-hidden="true"></div>
+                        </a>
+                      </li>
+                    ))
+                  }
+                  <li class="hamburger-nav__li">
+                    <a href={whatsappLink()} target="_blank" rel="noopener" class="hamburger-nav__a">
+                      <p class="hamburger-nav__p">Falar com especialista</p>
+                      <div class="hamburger-nav__dot" aria-hidden="true"></div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <button
+                type="button"
+                data-navigation-toggle="toggle"
+                aria-label="Alternar menu"
+                aria-expanded="false"
+                class="hamburger-nav__toggle"
+              >
+                <div class="hamburger-nav__toggle-bar"></div>
+                <div class="hamburger-nav__toggle-bar"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dim backdrop (fixed sibling): darkens the page while the menu is open; click to close. -->
+<div data-navigation-toggle="close" class="navigation__dark-bg" aria-hidden="true"></div>
+
+<script>
+  import "../scripts/navbar.ts";
+</script>

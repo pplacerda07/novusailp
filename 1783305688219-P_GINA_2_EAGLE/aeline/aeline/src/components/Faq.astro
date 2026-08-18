@@ -1,0 +1,50 @@
+---
+// Faq — perguntas frequentes em acordeão.
+//
+// Usa <details>/<summary> nativos em vez de acordeão em JavaScript: funciona
+// com teclado, é lido corretamente por leitor de tela, abre mesmo se o JS
+// falhar e o conteúdo está sempre no HTML, o que importa para busca e para os
+// motores de resposta.
+//
+// As perguntas vêm de src/lib/faq.ts, o mesmo arquivo que alimenta o JSON-LD
+// do tipo FAQPage publicado na home.
+import { faq } from "../lib/faq";
+---
+
+<section class="fq-section">
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="fq-grid">
+
+        <div class="fq-intro">
+          <h2 data-reveal class="fq-headline">
+            Tem dúvidas? Relaxa, nós temos as respostas.
+          </h2>
+          <p data-reveal class="fq-lead">
+            Selecionamos algumas dúvidas que recebemos com frequência sobre nossos
+            serviços, elas podem ser úteis para você.
+          </p>
+        </div>
+
+        <ul class="fq-lista" data-stagger>
+          {faq.map((item) => (
+            <li class="fq-item">
+              <details class="fq-detalhe">
+                <summary class="fq-pergunta">
+                  <span class="fq-mais" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                      <path d="M12 5v14M5 12h14" />
+                    </svg>
+                  </span>
+                  <span>{item.pergunta}</span>
+                </summary>
+                <p class="fq-resposta">{item.resposta}</p>
+              </details>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</section>

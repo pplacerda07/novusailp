@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+---
+<BaseLayout title="Pagina nao encontrada | Novus AI" description="The page you are looking for nao foi encontrada." noindex={true}>
+  <Navbar variant="secondary" />
+  <section class="main-wrapper">
+    <div class="section_not-encontrada">
+      <div class="not-encontrada_wrapper">
+        <div class="not-encontrada_content">
+          <div class="not-encontrada_header">
+            <h1 class="text-5xl text-color-primary">Pagina nao <em>encontrada</em></h1>
+          </div>
+          <div class="button_wrapper">
+            <a class="button-arrow w-inline-block">
+              <div class="button-arrow_wrap">
+                <div class="button-arrow_text">
+                  <div class="text_button">voltar ao inicio</div>
+                </div>
+                <div class="button_container-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewbox="0 0 20 20" fill="none" class="icon-1x1-main">
+                    <path d="M13.0457 8.13128L5.8733 15.3037L4.69479 14.1252L11.8672 6.95277L5.54568 6.95277L5.54568 5.28636H14.7121V14.4528L13.0457 14.4528V8.13128Z" fill="currentColor"></path>
+                  </svg></div>
+                <div class="button-arrow_bg"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Footer />
+  </section>
+</BaseLayout>

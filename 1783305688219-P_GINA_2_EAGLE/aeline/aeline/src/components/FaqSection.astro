@@ -1,0 +1,84 @@
+---
+const minusPath = "M18 12.9961H6C5.73478 12.9961 5.48043 12.8907 5.29289 12.7032C5.10536 12.5157 5 12.2613 5 11.9961C5 11.7309 5.10536 11.4765 5.29289 11.289C5.48043 11.1015 5.73478 10.9961 6 10.9961H18C18.2652 10.9961 18.5196 11.1015 18.7071 11.289C18.8946 11.4765 19 11.7309 19 11.9961C19 12.2613 18.8946 12.5157 18.7071 12.7032C18.5196 12.8907 18.2652 12.9961 18 12.9961Z";
+
+const faqs = [
+  {
+    q: "Para quais tipos de empresa a Novus AI atende?",
+    a: "Atendemos empresas de todos os portes — de PMEs a grandes corporações — nos segmentos de varejo, serviços B2B, saúde, educação, franquias, agronegócio, indústria e distribuição. Nossa abordagem é flexível e personalizada para o modelo de negócio de cada cliente.",
+  },
+  {
+    q: "Como funciona o processo de implantação?",
+    a: "Seguimos 4 etapas: Diagnóstico (entendemos seus desafios), Desenho da solução (definimos estratégia e arquitetura), Implantação (configuração, integração e treinamento) e Evolução contínua (acompanhamento e otimização focada em resultados).",
+  },
+  {
+    q: "O que diferencia as soluções da Novus AI?",
+    a: "Focamos em praticidade, não em hype. Nossas soluções são construídas sobre seus dados e fluxos de trabalho específicos. Priorizamos integração fluida e ROI claro, garantindo que a tecnologia resolva problemas reais do negócio.",
+  },
+  {
+    q: "Preciso ter conhecimento técnico para usar os produtos?",
+    a: "Não. Nós cuidamos de toda a parte técnica. Nossos agentes, por exemplo, permitem consultas em linguagem natural — você pergunta como se estivesse conversando. Nossa equipe faz a ponte entre tecnologia complexa e objetivos de negócio.",
+  },
+  {
+    q: "Em quanto tempo vejo resultados?",
+    a: "Os prazos variam conforme o escopo, mas estruturamos nosso trabalho para entregar ganhos rápidos logo no início, enquanto construímos valor de longo prazo. Tipicamente, clientes percebem impacto nas primeiras semanas, com ROI substancial nos meses seguintes.",
+  },
+];
+---
+<section class="section_faq">
+  <div class="padding-section-large"></div>
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="vertical-center">
+        <div data-reveal class="vertical-center">
+          <div data-wf--tag-section--variant="base" class="tag">
+            <div class="dot-square"></div>
+            <div>FAQ</div>
+          </div>
+          <div class="spacer-large"></div>
+          <h2 class="text-align-center">Perguntas frequentes</h2>
+          <div class="spacer-large"></div>
+          <div class="max-width-medium is-34rem">
+            <div class="text-base text-align-center text-color-secondary">Tudo o que você precisa saber sobre nossas soluções de IA, dados e automação — da estratégia à implantação.</div>
+          </div>
+        </div>
+        <div class="spacer-section-medium"></div>
+        <div class="faq_items max-width-large" data-faq data-stagger=".faq_item">
+          {faqs.map((item) => (
+            <div class="faq_item scroll-right">
+              <div class="faq_top">
+                <div class="text-xl">{item.q}</div>
+                <div class="container-icon bg-default"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewbox="0 0 24 24" fill="none" class="icon-1x1-medium">
+                    <path d={minusPath} fill="currentColor"></path>
+                  </svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewbox="0 0 24 24" fill="none" class="icon-1x1-medium is-animated">
+                    <path d={minusPath} fill="currentColor"></path>
+                  </svg></div>
+              </div>
+              <div class="faq_bottom">
+                <div class="faq_bottom-inner">
+                  <div class="text-base text-color-secondary">{item.a}</div>
+                  <div class="spacer-large"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="padding-section-large"></div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-faq]").forEach((group) => {
+    const items = Array.from(group.querySelectorAll<HTMLElement>(".faq_item"));
+    items.forEach((item) => {
+      const top = item.querySelector<HTMLElement>(".faq_top");
+      if (!top) return;
+      top.addEventListener("click", () => {
+        const willOpen = !item.classList.contains("is-open");
+        items.forEach((other) => other.classList.remove("is-open"));
+        if (willOpen) item.classList.add("is-open");
+      });
+    });
+  });
+</script>

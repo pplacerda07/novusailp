@@ -1,0 +1,118 @@
+---
+// ChatbotContrast — seção de contraste: o chatbot engessado x o agente da Novus.
+//
+// Bloco branco. O personagem "Worried Man" vinha branco sobre preto no demo
+// original; aqui ele é azul da marca sobre branco. Os fills do SVG são
+// `currentColor`, então a cor da figura sai de uma única regra de CSS.
+//
+// Os balões têm duas fases e alternam a cada 5s (src/scripts/worried-man.ts):
+// a fase 0 é o chatbot travando, a fase 1 é a mesma conversa com o agente.
+// Os dois textos ficam no HTML e só a opacidade muda, então o conteúdo existe
+// para leitores de tela e buscadores mesmo sem o JS rodar.
+
+import { whatsappLink } from "../lib/whatsapp";
+
+const baloes = [
+  { pos: "is-1", bot: "Digite 1 para vendas", novus: "Pode escrever do seu jeito" },
+  { pos: "is-2", bot: "Não entendi sua pergunta", novus: "Entendi, já te explico" },
+  { pos: "is-3", bot: "Escolha uma das opções", novus: "Te mando as condições agora" },
+  { pos: "is-4", bot: "Eu só queria saber o valor…", novus: "Consigo agendar amanhã?", cliente: true },
+  { pos: "is-5", bot: "Por favor, tente novamente", novus: "Agendei e confirmei com você" },
+  { pos: "is-6", bot: "Aguarde um atendente", novus: "Passei tudo para o vendedor" },
+];
+---
+
+<section class="wm-section">
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="wm-grid">
+
+        <!-- Coluna do personagem -->
+        <div class="wm-stage">
+          <!-- Worried Man. O SVG original vinha num viewBox 800x600 pensado para
+               ocupar a tela inteira, com a figura ocupando só um pedaço. Aqui o
+               viewBox é recortado em volta dela: as coordenadas internas seguem
+               as mesmas (o script depende delas), só o enquadramento mudou.
+               Elementos mortos do demo saíram: os defs #pop, #dislike, #bush*,
+               #loveHeart e #footPath nunca eram desenhados, e a linha .road tinha
+               stroke-width 0, ou seja, era invisível.
+               Começa com visibility:hidden e o script revela, para a figura não
+               piscar na pose crua antes do GSAP posicionar os pés. -->
+          <div class="wm-character" data-reveal="scale">
+            <svg
+              data-worried-man
+              viewBox="300 105 235 380"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="Pessoa andando de um lado para o outro, esperando resposta"
+              style="visibility:hidden"
+            >
+              <ellipse class="shadow" cx="410" cy="470" rx="88" ry="5" />
+
+              <g class="foot footL">
+                <path d="M36.52,16.42h-32A4.47,4.47,0,0,1,0,11.94V4.48A4.48,4.48,0,0,1,5,0l32,3.91A4.48,4.48,0,0,1,41,8.39v3.55A4.47,4.47,0,0,1,36.52,16.42Z" fill="currentColor" />
+              </g>
+
+              <g class="foot footR">
+                <path d="M36.52,16.42h-32A4.47,4.47,0,0,1,0,11.94V4.48A4.48,4.48,0,0,1,5,0l32,3.91A4.48,4.48,0,0,1,41,8.39v3.55A4.47,4.47,0,0,1,36.52,16.42Z" fill="currentColor" />
+              </g>
+
+              <g class="upperBody" transform="translate(10, 0)">
+                <g transform="translate(5, -20)" fill="currentColor">
+                  <path class="torso" d="M407.47,262.21q.4-6.33,1.25-12.61a18,18,0,0,0-2.18-11.27,27.58,27.58,0,0,0-14.22-12.68h0a21.46,21.46,0,0,0-14.17.42c-9.7,3.69-17.49,14-23.12,30.77a143.06,143.06,0,0,0-6.22,44.52c0,13.26,2.4,31.32,11.67,42.17h0a25.4,25.4,0,0,0,8,6.35c2.83,1.67,15.53,7.89,35.17-1h0a37,37,0,0,0,11.91-8.13,10.88,10.88,0,0,0,1.58-12.34l-.46-.9a139.88,139.88,0,0,1-4.29-14.16c-.17-1-.35-2-.55-3a4.9,4.9,0,0,0-.61-1.41c-.36-1.69-3.43-21.94-3.76-23.68A172.92,172.92,0,0,1,407.47,262.21Z" />
+                  <g class="hand">
+                    <circle cx="468.74" cy="285.01" r="20.82" />
+                    <rect x="460.77" y="265.14" width="39.15" height="12.54" rx="6.27" ry="6.27" transform="translate(-65.87 349.14) rotate(-37.57)" />
+                  </g>
+                  <circle class="headBob" cx="420" cy="180" r="36" fill="currentColor" />
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Balões ao redor do personagem -->
+          <div class="wm-bubbles" data-fase="0">
+            {baloes.map((b) => (
+              <div class={`wm-bubble ${b.pos}${b.cliente ? " is-cliente" : ""}`}>
+                <span data-f="0">{b.bot}</span>
+                <span data-f="1">{b.novus}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Coluna da copy -->
+        <div class="wm-copy">
+          <h2 data-reveal class="wm-headline">
+            Quanto te custa um chatbot que só dá dor de cabeça?
+          </h2>
+
+          <p data-reveal class="wm-lead">
+            <span class="wm-valor">R$ 300</span>, <span class="wm-valor">R$ 400</span>
+            por mês? Esse é o menor custo. O caro é o cliente que perguntou o preço,
+            recebeu “digite 1” e foi comprar em outro lugar.
+          </p>
+
+          <p data-reveal class="wm-lead">
+            Com o <strong class="nome-produto">VendeAI</strong>, o agente entende a pergunta do jeito que ela foi escrita,
+            responde com as informações da sua empresa, qualifica o contato e agenda o
+            próximo passo.
+          </p>
+
+          <div data-reveal class="wm-cta">
+            <a href={whatsappLink()} target="_blank" rel="noopener" class="button is-hero-invert w-inline-block">
+              <div class="text-button-wrap">
+                <div>Ver o agente funcionando</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import "../scripts/worried-man.ts";
+</script>

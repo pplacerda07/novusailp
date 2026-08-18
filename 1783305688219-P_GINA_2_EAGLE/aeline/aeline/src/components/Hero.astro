@@ -1,0 +1,60 @@
+---
+import { whatsappLink } from "../lib/whatsapp";
+---
+<section data-anim="hero" class="section_hero">
+  <div data-hero-wrap class="hero_wrap">
+    <div class="padding-global is-hero">
+      <div class="vertical-center">
+        <!-- Sem <br> fixo: a largura máxima do wrapper controla a quebra, e
+             text-wrap:balance distribui as linhas. Também não usamos opacity aqui:
+             texto translúcido sobre a ilustração perde legibilidade. -->
+        <div class="hero_headline">
+          <h1 hero-text class="text-align-center">Atenda seus leads no WhatsApp antes que eles procurem outra empresa.</h1>
+        </div>
+        <div class="spacer-huge"></div>
+        <!-- CTA único: o documento de copy manda direcionar o visitante para testar o agente. -->
+        <div class="button_wrapper is-hero">
+          <div data-hero-button>
+            <a href={whatsappLink()} target="_blank" rel="noopener" class="button is-hero-invert w-inline-block">
+              <div class="text-button-wrap">
+                <div>Testar o agente no WhatsApp</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Selo Meta Business Partner, canto superior direito. Arquivo oficial.
+       O PNG já traz o cartão branco, a borda e o arredondamento, então o
+       contêiner não desenha cartão nenhum: só posiciona e dá a sombra. -->
+  <div class="hero_selo" data-hero-fade>
+    <img
+      src="/images/selo-meta.avif"
+      srcset="/images/selo-meta-320.avif 320w, /images/selo-meta.avif 480w"
+      sizes="160px"
+      width="1548"
+      height="887"
+      loading="lazy"
+      decoding="async"
+      alt="Meta Business Partner"
+      class="hero_selo-img"
+    />
+  </div>
+
+  <div class="spacer">
+    <div style="height: 4rem" class="spacer-desktop"></div>
+    <div style="height: 5rem" class="spacer-tablet"></div>
+    <div style="height: 5rem" class="spacer-mobile"></div>
+  </div>
+  <!-- O carrossel 3D de cards saiu daqui — agora vive em CardsLoop.astro, logo abaixo da hero. --><img
+    src="/images/novus-hero-bg.avif"
+    srcset="/images/novus-hero-bg-800.avif 800w, /images/novus-hero-bg-1280.avif 1280w, /images/novus-hero-bg.avif 1920w"
+    sizes="100vw"
+    data-hero-bg
+    loading="eager"
+    fetchpriority="high"
+    alt=""
+    class="img is-hero"
+  >
+</section>

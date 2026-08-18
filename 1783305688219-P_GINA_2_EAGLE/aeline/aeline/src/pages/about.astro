@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import SobreHero from "../components/AboutHero.astro";
+import SobreIntro from "../components/AboutIntro.astro";
+import TeamSection from "../components/TeamSection.astro";
+import JourneySection from "../components/JourneySection.astro";
+import CtaSection from "../components/CtaSection.astro";
+---
+<BaseLayout title="Sobre — Novus AI" description="Somos a Novus AI, especialistas em conectar tecnologia e resultado por meio de agentes conversacionais de inteligência artificial para o seu negócio.">
+  <Navbar variant="secondary" />
+  <main class="main-wrapper">
+    <SobreHero /><SobreIntro /><TeamSection /><JourneySection /><CtaSection />
+    <Footer />
+  </main>
+</BaseLayout>

@@ -1,0 +1,2131 @@
+/* Overrides de componente — só o que a folha base não consegue expressar */
+
+/* ── Botões: contraste sobre o Novus Blue ──────────────────────────────────────
+   O template original usava o verde-limão #d6fd70 como fundo de botão com texto
+   quase preto — contraste altíssimo. Com o Novus Blue #015EFD no lugar, o texto
+   marinho herdado cai para ~3,4:1 e reprova no AA. Texto branco sobre o azul dá
+   ~4,9:1. O hover também muda: era `bg-default` (agora branco, o que apagaria o
+   texto branco), passa a ser o azul escuro. */
+.button {
+  color: var(--base--white);
+}
+.button:hover {
+  background-color: var(--base--blue-dark);
+  color: var(--base--white);
+}
+/* ── Hero: selo Meta Business Partner ──────────────────────────────────────────
+   Cartão branco no canto superior direito, abaixo da navbar. z-index acima da
+   ilustração de fundo. */
+/* Sem fundo nem padding: o PNG oficial já traz o cartão branco com borda e
+   cantos arredondados. A sombra fica no contêiner só para o selo descolar da
+   ilustração azul da hero. */
+.hero_selo {
+  position: absolute;
+  top: 6.5rem;
+  right: 3.5rem;
+  z-index: 3;
+  width: 10rem;
+  border-radius: 1rem;
+  box-shadow: 0 14px 34px -16px rgba(4, 31, 48, 0.45);
+}
+.hero_selo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media screen and (max-width: 991px) {
+  .hero_selo {
+    top: 5rem;
+    right: 1.5rem;
+    width: 7.5rem;
+  }
+}
+@media screen and (max-width: 620px) {
+  /* Na hero estreita o selo brigaria com o título. */
+  .hero_selo {
+    display: none;
+  }
+}
+
+/* ── Hero: headline ────────────────────────────────────────────────────────────
+   Sem limite de largura o h1 atravessava a tela inteira e batia nos desenhos da
+   ilustração nas laterais. O novo background deixa uma faixa limpa no centro, e
+   é nela que o título precisa caber. */
+.hero_headline {
+  width: 100%;
+  max-width: 54rem;
+  margin-inline: auto;
+}
+.hero_headline h1 {
+  text-wrap: balance;                /* distribui as linhas em vez de deixar uma órfã */
+  color: var(--base--white);
+}
+@media screen and (max-width: 991px) {
+  .hero_headline {
+    max-width: 38rem;
+  }
+}
+
+/* CTA principal da hero (abaixo do título): verde de conversa com texto branco. */
+.button.is-hero-invert {
+  background-color: var(--base--whatsapp);
+  color: var(--base--white);
+  min-height: 2.25rem;
+  padding: .375rem 1.5rem;
+  font-size: .8125rem;
+  letter-spacing: .06em;
+}
+.button.is-hero-invert:hover {
+  background-color: var(--base--whatsapp-dark);
+  color: var(--base--white);
+}
+
+/* Botão do topo (navbar): branco com texto azul, invertendo o CTA da hero para
+   os dois não competirem. */
+.navbar .login-wrap .button {
+  background-color: var(--base--white);
+  color: var(--base--blue);
+}
+.navbar .login-wrap .button:hover {
+  background-color: var(--base--ice);
+  color: var(--base--blue-dark);
+}
+
+/* Variante de card (fundo marinho): azul sobre marinho fica ilegível → texto branco
+   e o azul da marca reservado para o hover. */
+.button:where(.w-variant-e7c0edd3-8276-a3ba-3d91-2abb3afb4c44) {
+  color: var(--base--white);
+}
+.button:hover:where(.w-variant-e7c0edd3-8276-a3ba-3d91-2abb3afb4c44) {
+  background-color: var(--base--blue);
+  color: var(--base--white);
+}
+
+/* ── Seção de contraste com o chatbot (ChatbotContrast.astro) ──────────────────
+   Bloco branco. Duas colunas: personagem cercado de balões à esquerda, copy à
+   direita. Hierarquia de cor: os balões do bot ficam apagados em cinza, a fala
+   do cliente é marinho sólido e o personagem é azul da marca. */
+.wm-section {
+  background-color: var(--base--white);
+  color: var(--text-color--text-primary);
+  padding-block: var(--_sizes---padding-section--large);
+  overflow: hidden;
+}
+.wm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Palco do personagem: os balões são posicionados em relação a ele. */
+.wm-stage {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wm-character {
+  position: relative;
+  z-index: 1;
+  width: 52%;
+  /* Mesma proporção do viewBox recortado do SVG (235 x 380). */
+  aspect-ratio: 235 / 380;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Cor do personagem: os fills do SVG são currentColor, então esta linha define
+   a figura inteira. */
+.wm-character {
+  color: var(--base--blue);
+}
+.wm-character svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* A sombra no chão não acompanha a cor da figura: sombra azul não existe.
+   Fica marinho bem apagado. */
+.wm-character .shadow {
+  fill: var(--base--navy);
+  opacity: 0.14;
+}
+
+.wm-bubbles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.wm-bubble {
+  position: absolute;
+  max-width: 12rem;
+  padding: .625rem 1rem;
+  border-radius: 1rem;
+  background-color: var(--base--cloud);
+  border: 1px solid var(--grey--grey-200);
+  color: var(--grey--grey-400);
+  font-size: .875rem;
+  line-height: 1.35;
+  transition: background-color .45s ease, border-color .45s ease, color .45s ease;
+  /* As duas fases ocupam a mesma célula do grid: o balão dimensiona pelo texto
+     mais longo dos dois e não muda de tamanho ao trocar de fase. */
+  display: grid;
+}
+.wm-bubble > span {
+  grid-area: 1 / 1;
+  transition: opacity .45s ease;
+}
+.wm-bubbles[data-fase="0"] .wm-bubble > [data-f="1"],
+.wm-bubbles[data-fase="1"] .wm-bubble > [data-f="0"] {
+  opacity: 0;
+}
+
+/* Fase 1: a mesma conversa com o agente. Os balões saem do cinza apagado e
+   ganham o azul da marca. */
+.wm-bubbles[data-fase="1"] .wm-bubble {
+  background-color: var(--base--ice);
+  border-color: rgba(1, 94, 253, 0.3);
+  color: var(--base--blue-dark);
+}
+
+/* A fala do cliente: única mensagem humana no meio das respostas automáticas,
+   então ela é sólida em qualquer fase enquanto as do bot ficam apagadas. */
+.wm-bubble.is-cliente,
+.wm-bubbles[data-fase="1"] .wm-bubble.is-cliente {
+  background-color: var(--base--navy);
+  border-color: var(--base--navy);
+  color: var(--base--white);
+  font-weight: var(--_typography---font-weight--semibold);
+}
+
+/* Posições em volta do personagem, que ocupa a faixa central do palco.
+   Os deslocamentos negativos jogam os balões para fora dessa faixa; a seção tem
+   overflow hidden, então nada vaza da página. */
+.wm-bubble.is-1 { top: 4%; left: -4%; }
+.wm-bubble.is-2 { top: 1%; right: -4%; }
+.wm-bubble.is-3 { top: 36%; left: -10%; }
+.wm-bubble.is-4 { top: 32%; right: -10%; }
+/* is-5 fica bem à esquerda e mais alto: na posição anterior ele cobria os pés,
+   que é justamente onde a animação acontece. */
+.wm-bubble.is-5 { bottom: 20%; left: -10%; }
+.wm-bubble.is-6 { bottom: 4%; right: -6%; }
+
+/* Coluna da copy. O recuo à esquerda afasta o texto do palco do personagem,
+   que é largo e tem balões saindo pelas bordas. */
+.wm-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-left: 3rem;
+}
+
+/* ── Seção de treinamento (Treinamento.astro) ──────────────────────────────────
+   Cartão grande com o print do painel em perspectiva, sangrando para fora da
+   borda direita, e a copy abaixo. */
+.tr-section {
+  background-color: var(--base--white);
+  padding-block: var(--_sizes---padding-section--large);
+}
+/* A pergunta é o gancho da seção: fica inteira, centralizada e em uma linha só
+   até onde a tela permitir. Sem max-width apertado, que era o que quebrava a
+   frase no meio e jogava tudo para a esquerda. */
+.tr-headline {
+  margin: 0 auto 3rem;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* Wrapper do visual: existe para a pilha de formatos poder ficar encostada na
+   borda esquerda do cartão sem ser recortada pelo overflow dele. */
+.tr-visual {
+  position: relative;
+}
+
+.tr-card {
+  position: relative;
+  border-radius: var(--radius--card);
+  border: 1px solid var(--grey--grey-200);
+  background-color: var(--base--cloud);
+  /* Trama de pontos no azul da marca, bem diluída. */
+  background-image: radial-gradient(rgba(1, 94, 253, 0.22) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+  overflow: hidden;
+  aspect-ratio: 16 / 8;
+}
+
+/* Pilha de formatos que alimenta o treinamento. Fica meio para fora do cartão,
+   escalonada, como se os arquivos estivessem entrando no painel. */
+.tr-fontes {
+  position: absolute;
+  top: 50%;
+  left: -2.5rem;
+  transform: translateY(-50%);
+  z-index: 2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .625rem;
+}
+.tr-fonte {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  padding: .5rem .875rem .5rem .5rem;
+  border-radius: 5rem;
+  background-color: var(--base--white);
+  border: 1px solid var(--grey--grey-200);
+  box-shadow: 0 10px 24px -12px rgba(4, 31, 48, 0.28);
+  font-size: .8125rem;
+  font-weight: var(--_typography---font-weight--semibold);
+  color: var(--text-color--text-primary);
+  white-space: nowrap;
+}
+/* Escalonamento: o do meio avança mais que os das pontas. */
+.tr-fonte:nth-child(2) { margin-left: 1.25rem; }
+.tr-fonte:nth-child(3) { margin-left: 2rem; }
+.tr-fonte:nth-child(4) { margin-left: 1.25rem; }
+
+.tr-fonte_icone {
+  flex: none;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: .75rem;
+  display: grid;
+  place-items: center;
+}
+.tr-fonte_icone svg { width: 1rem; height: 1rem; }
+.tr-fonte_icone.is-azul { background-color: var(--base--blue); color: var(--base--white); }
+.tr-fonte_icone.is-verde { background-color: var(--base--whatsapp); color: var(--base--white); }
+.tr-fonte_icone.is-marinho { background-color: var(--base--navy); color: var(--base--white); }
+.tr-fonte_icone.is-ceu { background-color: var(--base--sky); color: var(--base--navy); }
+/* O palco dá a perspectiva. O print fica deslocado para dentro dela, encostando
+   na borda de cima e sangrando pela direita. */
+.tr-stage {
+  position: absolute;
+  inset: 0;
+  perspective: 1600px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* Recuo generoso à esquerda: é onde a pilha de formatos passa por cima. */
+  padding: 3.5rem 0 0 11rem;
+}
+/* O painel é DOM, não imagem: por isso tem largura de projeto fixa e é reduzido
+   por escala nos breakpoints. Assim as proporções internas nunca se deformam. */
+.tr-shot {
+  width: 1100px;
+  flex: none;
+  border-radius: 1rem;
+  border: 1px solid var(--grey--grey-200);
+  background-color: var(--base--white);
+  box-shadow: 0 32px 60px -24px rgba(4, 31, 48, 0.28);
+  transform: rotateX(6deg) rotateY(-13deg) rotateZ(1.5deg) scale(var(--tr-escala, 1));
+  transform-origin: left top;
+  /* Some nas bordas em vez de cortar seco, para o print parecer continuar. */
+  -webkit-mask-image: linear-gradient(to right, #000 52%, transparent 96%),
+    linear-gradient(to bottom, #000 58%, transparent 97%);
+  mask-image: linear-gradient(to right, #000 52%, transparent 96%),
+    linear-gradient(to bottom, #000 58%, transparent 97%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.tr-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+  margin: 3.5rem auto 0;
+}
+
+.tr-destaque {
+  margin: 0;
+  color: var(--text-color--text-primary);
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-weight: var(--_typography---font-weight--medium);
+  line-height: 1.35;
+  letter-spacing: -.02em;
+}
+.tr-destaque strong {
+  font-weight: var(--_typography---font-weight--bold);
+}
+/* Em telas largas a frase cabe inteira numa linha só. */
+@media screen and (min-width: 992px) {
+  .tr-destaque {
+    white-space: nowrap;
+  }
+}
+
+/* Frase de apoio: menor e mais clara, para não competir com a de cima.
+   Sem max-width, senão ela quebra em duas linhas. */
+.tr-apoio {
+  margin: -1rem 0 0;
+  color: var(--text-color--text-secondary);
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.6;
+}
+@media screen and (min-width: 992px) {
+  .tr-apoio {
+    white-space: nowrap;
+  }
+}
+
+/* CTA maior que o padrão: é o único próximo passo da seção. */
+.button.is-hero-invert.is-grande {
+  min-height: 3.25rem;
+  padding: .75rem 2.25rem;
+  font-size: 1rem;
+  letter-spacing: .04em;
+}
+
+@media screen and (max-width: 1199px) {
+  .tr-shot { --tr-escala: .82; }
+}
+@media screen and (max-width: 991px) {
+  .tr-card {
+    aspect-ratio: 5 / 4;
+  }
+  .tr-stage {
+    padding: 2rem 0 0 1.5rem;
+  }
+  /* Sem espaço para a pilha ao lado: os formatos viram uma fileira acima do
+     cartão, ainda antes do painel, mantendo a leitura "isto alimenta aquilo". */
+  .tr-fontes {
+    position: static;
+    transform: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .tr-fonte:nth-child(2),
+  .tr-fonte:nth-child(3),
+  .tr-fonte:nth-child(4) {
+    margin-left: 0;
+  }
+  .tr-shot {
+    --tr-escala: .62;
+    transform: rotateX(4deg) rotateY(-10deg) rotateZ(1deg) scale(var(--tr-escala));
+  }
+  .tr-headline {
+    margin-bottom: 2rem;
+  }
+}
+@media screen and (max-width: 620px) {
+  .tr-shot { --tr-escala: .42; }
+}
+
+/* ── Painel do VendeAI recriado em DOM (PainelMock.astro) ──────────────────────
+   Substitui o print. Cores todas vindas dos tokens, então acompanha a marca.
+   Medidas em px porque o bloco tem largura de projeto fixa (1100px) e é reduzido
+   por scale(): usar rem faria o texto escalar duas vezes. */
+.ui {
+  background-color: var(--base--white);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-color--text-primary);
+  padding: 18px 20px 24px;
+}
+.ui p { margin: 0; }
+
+.ui-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--grey--grey-200);
+}
+.ui-top_esq { display: flex; align-items: center; gap: 10px; }
+/* Verde mais escuro que o .nome-produto: aqui o nome tem 15px, tamanho em que o
+   #02A18F não alcança o contraste mínimo sobre branco. */
+.ui-logo { font-weight: 700; font-size: 15px; letter-spacing: -.02em; color: var(--base--whatsapp-dark); }
+.ui-top_dir { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--grey--grey-400); }
+
+.ui-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 5rem;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: var(--base--cloud);
+  color: var(--grey--grey-400);
+}
+.ui-pill i { width: 6px; height: 6px; border-radius: 50%; background-color: currentColor; }
+.ui-pill.is-on { background-color: #E6F7F3; color: #017F71; }
+.ui-pill.is-info { background-color: var(--base--ice); color: var(--base--blue-dark); }
+.ui-pill.is-beta { background-color: #FFF3E0; color: #B26A00; }
+
+/* Faixa de saudação: o único bloco em azul cheio, para puxar o olho primeiro. */
+.ui-saudacao {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background-image: linear-gradient(110deg, var(--base--blue) 0%, #0B4FD6 62%, var(--base--navy) 100%);
+  color: var(--base--white);
+}
+.ui-avatar {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background-color: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+.ui-avatar svg { width: 28px; height: 28px; }
+.ui-saudacao_txt { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.ui-saudacao_txt strong { font-size: 16px; font-weight: 700; letter-spacing: -.01em; }
+.ui-saudacao_txt span { color: rgba(255, 255, 255, 0.78); }
+.ui-saudacao_acoes { display: flex; gap: 8px; flex: none; }
+
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 5rem;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ui-btn.is-verde { background-color: var(--base--whatsapp); color: var(--base--white); }
+.ui-btn.is-fantasma { background-color: rgba(255, 255, 255, 0.16); color: var(--base--white); border: 1px solid rgba(255, 255, 255, 0.3); }
+.ui-btn.is-cheio { background-color: var(--base--navy); color: var(--base--white); width: 100%; margin-top: 4px; }
+
+.ui-label {
+  margin: 22px 0 10px !important;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--grey--grey-400);
+}
+
+.ui-grid { display: grid; gap: 12px; }
+.ui-grid.is-2 { grid-template-columns: repeat(2, 1fr); }
+.ui-grid.is-4 { grid-template-columns: repeat(4, 1fr); }
+
+.ui-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--grey--grey-200);
+  background-color: var(--base--white);
+  box-shadow: 0 1px 2px rgba(4, 31, 48, 0.04);
+}
+.ui-card.is-canal { gap: 8px; }
+.ui-canal_topo { display: flex; align-items: center; justify-content: space-between; }
+
+/* Ladrilhos de ícone: é daqui que vem a cor da interface. */
+.ui-icone {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 6px;
+}
+.ui-icone.is-pequeno { width: 32px; height: 32px; border-radius: 10px; margin-bottom: 0; }
+.ui-icone svg { width: 20px; height: 20px; }
+.ui-icone.is-pequeno svg { width: 17px; height: 17px; }
+.ui-icone.is-azul { background-color: var(--base--blue); color: var(--base--white); }
+.ui-icone.is-ceu { background-color: var(--base--sky); color: var(--base--navy); }
+.ui-icone.is-verde { background-color: var(--base--whatsapp); color: var(--base--white); }
+.ui-icone.is-marinho { background-color: var(--base--navy); color: var(--base--white); }
+
+.ui-olho {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--base--blue);
+}
+.ui-titulo { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+.ui-titulo.is-menor { font-size: 13px; }
+.ui-desc { color: var(--grey--grey-400); font-size: 12px; }
+
+/* ── Seção de garantias (Garantias.astro) ──────────────────────────────────────
+   Espelhada em relação à seção do chatbot: cartões à esquerda, ilustração à
+   direita. As duas são vizinhas e o mesmo esqueleto repetido cansaria. */
+.tg-section {
+  background-color: var(--base--white);
+  padding-block: var(--_sizes---padding-section--large);
+  overflow: hidden;
+}
+.tg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Mesma anatomia da coluna de copy da seção do chatbot (.wm-copy): título,
+   parágrafos e botão, alinhados à esquerda. */
+.tg-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-right: 2rem;
+}
+.tg-headline {
+  margin: 0;
+  color: var(--text-color--text-primary);
+  text-wrap: balance;
+}
+.tg-lead {
+  margin: 0;
+  color: var(--text-color--text-secondary);
+  font-size: var(--_typography---lg--font-size);
+  line-height: 1.6;
+}
+/* Trechos que carregam a promessa: destacados em marinho dentro do parágrafo
+   cinza, como os valores fazem na seção do chatbot. */
+.tg-forte {
+  color: var(--text-color--text-primary);
+  font-weight: var(--_typography---font-weight--bold);
+}
+.tg-cta {
+  margin-top: .5rem;
+}
+
+.tg-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tg-figura {
+  width: 100%;
+  max-width: 26rem;
+  height: auto;
+  /* Os fills do SVG são currentColor: a figura inteira sai desta linha. */
+  color: var(--base--blue);
+}
+/* A sombra no chão não segue a cor da figura: sombra azul não existe. */
+.tg-figura .tg-sombra {
+  fill: var(--base--navy);
+  opacity: .12;
+}
+
+@media screen and (max-width: 991px) {
+  .tg-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  /* No empilhamento a ilustração vai para cima, igual à seção do chatbot. */
+  .tg-stage {
+    order: -1;
+  }
+  .tg-figura {
+    max-width: 20rem;
+  }
+  .tg-copy {
+    padding-right: 0;
+  }
+}
+
+/* ── Seção de depoimento em vídeo (Depoimento.astro) ───────────────────────────
+   Centralizada, com o vídeo grande: numa seção de prova social, o depoimento é
+   o conteúdo, não um apoio ao texto. Também quebra a alternância esquerda x
+   direita das duas seções anteriores. */
+.rv-section {
+  background-color: var(--base--white);
+  padding-block: var(--_sizes---padding-section--large);
+}
+.rv-headline {
+  margin: 0 auto 1rem;
+  text-align: center;
+  text-wrap: balance;
+}
+.rv-lead {
+  max-width: 40rem;
+  margin: 0 auto 3rem;
+  text-align: center;
+  color: var(--text-color--text-secondary);
+  font-size: var(--_typography---lg--font-size);
+  line-height: 1.6;
+  text-wrap: balance;
+}
+
+/* A proporção fica no contêiner, não no vídeo: assim a caixa reserva o espaço
+   final desde já e a troca pelo arquivo real não empurra nada na página. */
+.rv-video {
+  position: relative;
+  max-width: 56rem;
+  margin-inline: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius--card);
+  overflow: hidden;
+  background-color: var(--base--navy);
+  box-shadow: 0 40px 80px -40px rgba(4, 31, 48, 0.55);
+}
+.rv-player,
+.rv-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.rv-player {
+  object-fit: cover;
+  display: block;
+}
+/* Marcador enquanto o vídeo não existe. Some junto com o bloco .rv-poster. */
+.rv-poster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-image: radial-gradient(circle at 50% 45%, #0B3F6B 0%, var(--base--navy) 68%);
+}
+.rv-play {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background-color: var(--base--white);
+  color: var(--base--blue);
+  box-shadow: 0 0 0 .625rem rgba(255, 255, 255, 0.14);
+}
+.rv-play svg { width: 1.75rem; height: 1.75rem; margin-left: .125rem; }
+.rv-poster_txt {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: .875rem;
+  letter-spacing: .04em;
+}
+
+.rv-legenda {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  color: var(--text-color--text-secondary);
+  font-size: .9375rem;
+}
+.rv-legenda span { margin-inline: .375rem; }
+
+@media screen and (max-width: 991px) {
+  .rv-lead { margin-bottom: 2rem; }
+  .rv-play { width: 3.5rem; height: 3.5rem; }
+  .rv-play svg { width: 1.375rem; height: 1.375rem; }
+}
+
+/* ── Widget flutuante do WhatsApp (WhatsAppPopup.astro) ────────────────────────
+   z-index acima do menu hamburger (1001), mas o widget se esconde enquanto esse
+   menu está aberto: os dois disputariam o mesmo canto da tela. */
+.wa {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .75rem;
+}
+[data-navigation-status="active"] .wa {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wa_toggle {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background-color: var(--base--whatsapp);
+  color: var(--base--white);
+  box-shadow: 0 12px 28px -8px rgba(4, 31, 48, 0.45);
+  transition: transform .25s cubic-bezier(.19, 1, .22, 1), background-color .25s;
+}
+.wa_toggle:hover { transform: scale(1.06); background-color: var(--base--whatsapp-dark); }
+.wa_icone {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  transition: opacity .2s, transform .2s;
+}
+/* Os dois ícones ficam empilhados e trocam por opacidade: assim o botão nunca
+   muda de tamanho na transição. */
+.wa_icone.is-fechar { opacity: 0; transform: rotate(-45deg); }
+.wa.is-aberto .wa_icone.is-whats { opacity: 0; transform: rotate(45deg); }
+.wa.is-aberto .wa_icone.is-fechar { opacity: 1; transform: rotate(0); }
+
+.wa_card {
+  width: 18.5rem;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background-color: var(--base--white);
+  border: 1px solid var(--grey--grey-200);
+  box-shadow: 0 24px 56px -20px rgba(4, 31, 48, 0.4);
+  transform-origin: bottom right;
+  opacity: 0;
+  transform: translateY(.75rem) scale(.94);
+  pointer-events: none;
+  transition: opacity .22s ease, transform .28s cubic-bezier(.19, 1, .22, 1);
+}
+.wa.is-aberto .wa_card {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.wa_topo {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  padding: .875rem 1rem;
+  background-color: var(--base--whatsapp);
+  color: var(--base--white);
+}
+.wa_avatar {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  flex: none;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.wa_avatar svg { width: 1.25rem; height: 1.25rem; }
+.wa_id { display: flex; flex-direction: column; flex: 1; line-height: 1.25; }
+.wa_id strong { font-size: .9375rem; font-weight: var(--_typography---font-weight--bold); }
+.wa_id small {
+  display: flex;
+  align-items: center;
+  gap: .3125rem;
+  font-size: .75rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+.wa_id small i { width: .375rem; height: .375rem; border-radius: 50%; background-color: #7BE0A8; }
+.wa_fechar {
+  border: 0;
+  background: none;
+  padding: .25rem;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.85);
+  flex: none;
+}
+.wa_fechar svg { width: 1rem; height: 1rem; display: block; }
+.wa_fechar:hover { color: var(--base--white); }
+
+.wa_corpo {
+  padding: 1rem;
+  background-color: var(--base--cloud);
+}
+.wa_balao {
+  margin: 0;
+  padding: .75rem .875rem;
+  border-radius: .875rem .875rem .875rem .25rem;
+  background-color: var(--base--white);
+  border: 1px solid var(--grey--grey-200);
+  color: var(--text-color--text-primary);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+.wa_acao {
+  display: block;
+  padding: .875rem 1rem;
+  text-align: center;
+  background-color: var(--base--whatsapp);
+  color: var(--base--white);
+  font-size: .875rem;
+  font-weight: var(--_typography---font-weight--semibold);
+  text-decoration: none;
+}
+.wa_acao:hover { background-color: var(--base--whatsapp-dark); }
+
+@media screen and (max-width: 479px) {
+  .wa { right: 1rem; bottom: 1rem; }
+  .wa_card { width: calc(100vw - 2rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa_toggle, .wa_icone, .wa_card { transition: none; }
+}
+
+/* ── Cartões de decisão (Decisoes.astro) ───────────────────────────────────────
+   Baralho que gira e se desfaz conforme o scroll. Tudo preso ao .dc-section:
+   o CSS de referência estilizava `section`, `h1`, `h3`, `p` e `span` no geral,
+   o que vazaria para o site inteiro. */
+.dc-section {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  background-color: var(--base--blue);
+}
+
+.dc-frase {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  will-change: transform;
+}
+.dc-frase h2 {
+  max-width: 54rem;
+  margin: 0;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--base--white);
+}
+/* O verde padrão do nome do produto (#02A18F) dá 1,6:1 sobre o azul da marca e
+   simplesmente some. Aqui, e só aqui, ele usa a versão clareada. */
+.dc-section .nome-produto {
+  color: var(--base--whatsapp-claro);
+}
+
+.dc-baralho {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.dc-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24%;
+  min-width: 19rem;
+  max-width: 24rem;
+  aspect-ratio: 4 / 5;
+  padding: 2.75rem 2rem;
+  border-radius: var(--radius--card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  /* backface-visibility esconde o verso do cartão durante o giro: sem isso as
+     duas faces aparecem espelhadas ao mesmo tempo. */
+  backface-visibility: hidden;
+  will-change: transform;
+  box-shadow: 0 30px 60px -30px rgba(4, 31, 48, 0.45);
+}
+.dc-card h3 {
+  margin: 0;
+  font-size: var(--_typography---2xl--font-size);
+  font-weight: var(--_typography---font-weight--bold);
+  letter-spacing: -.03em;
+  line-height: 1.15;
+}
+.dc-card p {
+  margin: 0;
+  font-size: .9375rem;
+  line-height: 1.5;
+  /* 0.9 em vez de 0.82: com o texto do corpo em 15px, cada ponto de opacidade
+     a menos derruba o contraste abaixo do mínimo nos cartões escuros. */
+  opacity: .9;
+}
+
+.dc-card--frente {
+  transform: translate(-50%, 50%) rotateY(0deg);
+  background-color: var(--base--navy);
+  color: var(--base--white);
+}
+.dc-card--verso {
+  transform: translate(-50%, 50%) rotateY(180deg);
+}
+
+.dc-etiqueta {
+  padding: .375rem .75rem;
+  border-radius: 5rem;
+  background-color: rgba(255, 255, 255, 0.16);
+  font-size: .75rem;
+  font-weight: var(--_typography---font-weight--semibold);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.dc-seta {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+.dc-seta svg { width: 1.25rem; height: 1.25rem; }
+
+.dc-icone {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+.dc-icone svg { width: 1.75rem; height: 1.75rem; }
+
+/* Cada cartão com sua cor: no leque aberto é isso que deixa claro que são
+   quatro, e não um bloco só.
+   Paleta pensada para o fundo azul: dois cartões claros, um marinho e um verde.
+   O cartão azul que existia aqui saiu, porque sobre fundo azul ele desaparecia.
+   O verde é o tom escuro (#017F71): o #02A18F com texto branco dá 3,2:1, e o
+   texto do corpo tem 15px, tamanho que exige 4,5:1. */
+.dc-card.dc-1 { background-color: var(--base--white); color: var(--base--navy); }
+.dc-card.dc-1 .dc-icone { background-color: rgba(1, 94, 253, 0.12); color: var(--base--blue); }
+.dc-card.dc-2 { background-color: var(--base--navy); color: var(--base--white); }
+.dc-card.dc-3 { background-color: var(--base--sky); color: var(--base--navy); }
+.dc-card.dc-3 .dc-icone { background-color: rgba(4, 31, 48, 0.12); }
+/* Verde claro com texto marinho. Os dois tons escuros de verde (#02A18F e
+   #017F71) têm luminância parecida com a do azul de fundo: o texto dentro do
+   cartão ficava legível, mas o cartão inteiro quase não se descolava da seção. */
+.dc-card.dc-4 { background-color: var(--base--whatsapp-claro); color: var(--base--navy); }
+.dc-card.dc-4 .dc-icone { background-color: rgba(4, 31, 48, 0.12); }
+
+@media screen and (max-width: 767px) {
+  .dc-card {
+    min-width: 0;
+    width: 80%;
+    padding: 2rem 1.5rem;
+  }
+  .dc-card p { font-size: .875rem; }
+  .dc-icone { width: 3.25rem; height: 3.25rem; }
+  .dc-icone svg { width: 1.375rem; height: 1.375rem; }
+}
+
+/* Sem animação o baralho não se desfaz, então a seção vira uma lista comum:
+   frase no topo e os quatro cartões enfileirados. */
+@media (prefers-reduced-motion: reduce) {
+  .dc-section {
+    height: auto;
+    padding-block: var(--_sizes---padding-section--large);
+  }
+  .dc-frase {
+    position: static;
+    margin-bottom: 3rem;
+  }
+  .dc-baralho {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.25rem;
+    padding-inline: 1.5rem;
+    perspective: none;
+  }
+  .dc-card {
+    position: static;
+    width: auto;
+    max-width: none;
+    transform: none !important;
+    aspect-ratio: auto;
+  }
+  .dc-card--frente { display: none; }
+}
+
+/* ── Seção de conteúdos (Conteudos.astro) ──────────────────────────────────────
+   Lista enxuta de temas do blog. Compacta de propósito: a home é funil de
+   venda, o conteúdo longo mora na página do blog. */
+.ct-section {
+  background-color: var(--base--white);
+  padding-block: var(--_sizes---padding-section--large);
+}
+/* Largo o suficiente para o título caber em duas linhas. No max-width anterior
+   (44rem) a frase quebrava em quatro. */
+.ct-topo {
+  max-width: 70rem;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+/* Um pouco menor que o h2 padrão do site: com 48px a segunda linha não caberia
+   na largura do container e a frase voltaria a quebrar em três. */
+.ct-headline {
+  margin: 0 0 1rem;
+  font-size: clamp(1.75rem, 3.1vw, 2.5rem);
+  line-height: 1.2;
+}
+.ct-br { display: none; }
+@media screen and (min-width: 992px) {
+  .ct-br { display: inline; }
+}
+.ct-lead {
+  margin: 0;
+  color: var(--text-color--text-secondary);
+  font-size: var(--_typography---lg--font-size);
+  line-height: 1.6;
+  text-wrap: balance;
+}
+
+.ct-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+/* O cartão inteiro é o link, não só o título: a área de clique é o cartão que a
+   pessoa enxerga. */
+.ct-card {
+  display: flex;
+  flex-direction: column;
+  gap: .875rem;
+  height: 100%;
+  padding: 1.75rem;
+  border-radius: var(--radius--card);
+  background-color: var(--base--cloud);
+  border: 1px solid var(--grey--grey-200);
+  text-decoration: none;
+  color: inherit;
+  transition: transform .25s cubic-bezier(.19, 1, .22, 1), border-color .2s, box-shadow .25s;
+}
+.ct-card:hover {
+  transform: translateY(-.25rem);
+  border-color: rgba(1, 94, 253, 0.35);
+  box-shadow: 0 20px 40px -24px rgba(4, 31, 48, 0.4);
+}
+.ct-tag {
+  align-self: flex-start;
+  padding: .3125rem .75rem;
+  border-radius: 5rem;
+  background-color: var(--base--ice);
+  color: var(--base--blue-dark);
+  font-size: .6875rem;
+  font-weight: var(--_typography---font-weight--bold);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.ct-titulo {
+  margin: 0;
+  font-size: var(--_typography---lg--font-size);
+  font-weight: var(--_typography---font-weight--bold);
+  letter-spacing: -.02em;
+  line-height: 1.35;
+  color: var(--text-color--text-primary);
+  text-wrap: balance;
+}
+.ct-seta {
+  /* margin-top auto encosta a seta no rodapé do cartão: com títulos de alturas
+     diferentes, todas ficam alinhadas na mesma linha. */
+  margin-top: auto;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: var(--base--white);
+  border: 1px solid var(--grey--grey-200);
+  color: var(--base--blue);
+  transition: transform .25s cubic-bezier(.19, 1, .22, 1), background-color .2s, color .2s;
+}
+.ct-seta svg { width: 1.0625rem; height: 1.0625rem; }
+.ct-card:hover .ct-seta {
+  background-color: var(--base--blue);
+  border-color: var(--base--blue);
+  color: var(--base--white);
+  transform: translate(.15rem, -.15rem);
+}
+
+.ct-cta {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 991px) {
+  .ct-cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media screen and (max-width: 620px) {
+  .ct-cards { grid-template-columns: 1fr; }
+  .ct-card { padding: 1.375rem; }
+}
+
+/* ── CTA final sobre a arte (CtaFinal.astro) ───────────────────────────────────
+   Cartão arredondado com a arte dentro, no mesmo recuo e raio do cartão de CTA
+   que o template usava. */
+.cf-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--_sizes---fixed--xlarge);
+  /* Cartão mais baixo que a arte (que é 16:9). O corte tira cerca de 10% de
+     cima e 10% de baixo, faixas que na arte são só fundo: o robô, o "76%" e a
+     pessoa ficam entre 16% e 86% da altura e não são tocados.
+     Encurtar também aproxima a headline e o botão do robô no meio. */
+  aspect-ratio: 2.3 / 1;
+  /* Cor de segurança: a arte é lazy, e sem isso o cartão pisca branco com
+     texto branco por um instante. */
+  background-color: #0858C8;
+}
+.cf-arte {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Coluna da esquerda, ocupando a altura do cartão. O vão entre a headline e o
+   botão é onde o robô da arte aparece. */
+.cf-coluna {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* 34rem é a largura que faz a frase fechar em três linhas. O max-width inclui
+     o padding lateral, então a área útil de texto fica em torno de 467px: mais
+     estreito e a frase vira quatro linhas, mais largo e invade o "76%". */
+  max-width: 34rem;
+  /* Padding vertical alto de propósito. Com `space-between`, é ele que decide o
+     tamanho do vão entre a headline e o botão: quanto maior o padding, mais os
+     dois se aproximam do robô no meio da arte. Com padding pequeno eles colam
+     nas bordas do cartão e o vão fica enorme.
+     Os valores miram a headline terminando por volta de 40% da altura e o botão
+     começando por volta de 74%, que é a faixa livre logo acima e logo abaixo do
+     robô. */
+  padding: clamp(1.75rem, 9.5vw, 7.5rem) clamp(1.5rem, 3vw, 3rem) clamp(1.75rem, 7vw, 5.5rem);
+}
+.cf-headline {
+  margin: 0;
+  color: var(--base--white);
+  font-size: clamp(1.25rem, 1.9vw, 1.625rem);
+  line-height: 1.3;
+  letter-spacing: -.02em;
+}
+.cf-cta { display: flex; }
+
+@media screen and (max-width: 991px) {
+  .cf-card {
+    /* Em tela estreita o 16:9 achata demais e não sobra altura para o texto. */
+    aspect-ratio: 4 / 3;
+  }
+  .cf-arte { object-position: 72% center; }
+  .cf-coluna { max-width: 24rem; }
+}
+@media screen and (max-width: 620px) {
+  .cf-card {
+    aspect-ratio: auto;
+  }
+  /* Sem espaço para texto e ilustração dividirem a tela: a arte vira fundo azul
+     texturizado e o conteúdo entra em fluxo normal. */
+  .cf-arte { object-position: 78% center; opacity: .3; }
+  .cf-coluna {
+    height: auto;
+    max-width: none;
+    gap: 2.5rem;
+    padding: 2.5rem 1.5rem 3rem;
+  }
+}
+
+/* ── FAQ (Faq.astro) ───────────────────────────────────────────────────────────
+   Duas colunas: título fixo à esquerda, acordeão à direita. */
+.fq-section {
+  background-color: var(--base--white);
+  padding-block: var(--_sizes---padding-section--large);
+}
+.fq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 4rem;
+  align-items: start;
+}
+.fq-headline {
+  margin: 0 0 1rem;
+  text-wrap: balance;
+}
+.fq-lead {
+  margin: 0;
+  color: var(--text-color--text-secondary);
+  font-size: var(--_typography---lg--font-size);
+  line-height: 1.6;
+}
+
+.fq-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--grey--grey-200);
+  border-radius: var(--radius--surface);
+  overflow: hidden;
+}
+.fq-item + .fq-item {
+  border-top: 1px solid var(--grey--grey-200);
+}
+
+.fq-pergunta {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.375rem 1.5rem;
+  cursor: pointer;
+  font-size: var(--_typography---lg--font-size);
+  font-weight: var(--_typography---font-weight--semibold);
+  line-height: 1.4;
+  color: var(--text-color--text-primary);
+  transition: background-color .2s ease;
+  /* Some o triângulo padrão do <summary> nos dois motores. */
+  list-style: none;
+}
+.fq-pergunta::-webkit-details-marker { display: none; }
+.fq-pergunta:hover { background-color: var(--base--cloud); }
+.fq-detalhe[open] .fq-pergunta { padding-bottom: .75rem; }
+
+.fq-mais {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: .125rem;
+  color: var(--base--blue);
+  transition: transform .25s cubic-bezier(.19, 1, .22, 1);
+}
+.fq-mais svg { width: 1.125rem; height: 1.125rem; }
+/* O "+" vira "×" girando: sem trocar de ícone e sem JavaScript. */
+.fq-detalhe[open] .fq-mais { transform: rotate(45deg); }
+
+.fq-resposta {
+  margin: 0;
+  padding: 0 1.5rem 1.5rem 4rem;
+  color: var(--text-color--text-secondary);
+  line-height: 1.65;
+}
+
+@media screen and (max-width: 991px) {
+  .fq-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+@media screen and (max-width: 620px) {
+  .fq-pergunta { padding: 1.125rem 1rem; gap: .75rem; font-size: 1rem; }
+  .fq-resposta { padding: 0 1rem 1.25rem 2.75rem; }
+}
+
+/* ── Nome do produto ───────────────────────────────────────────────────────────
+   VendeAI é o produto principal. Classe global (não tem prefixo de seção) porque
+   o nome vai reaparecer em outras partes do site e precisa ter sempre o mesmo
+   peso. Herda a cor primária de texto para não sumir dentro de parágrafos
+   secundários, que são cinza. */
+.nome-produto {
+  color: var(--base--whatsapp);
+  font-weight: var(--_typography---font-weight--bold);
+}
+
+/* Os valores são a isca da headline: aparecem em marinho e mais pesados que o
+   resto do parágrafo. */
+.wm-valor {
+  color: var(--text-color--text-primary);
+  font-weight: var(--_typography---font-weight--bold);
+  font-size: 1.35em;
+  white-space: nowrap;
+}
+.wm-headline {
+  color: var(--text-color--text-primary);
+  margin: 0;
+  text-wrap: balance;
+}
+.wm-lead {
+  color: var(--text-color--text-secondary);
+  margin: 0;
+  font-size: var(--_typography---lg--font-size);
+  line-height: 1.6;
+}
+
+.wm-cta {
+  margin-top: .5rem;
+}
+
+@media screen and (max-width: 991px) {
+  .wm-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  /* Em coluna única o recuo perde a razão de existir e só come largura. */
+  .wm-copy {
+    padding-left: 0;
+  }
+  .wm-stage {
+    order: -1;
+    max-width: 32rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .wm-bubble {
+    max-width: 9rem;
+    font-size: .8125rem;
+    padding: .5rem .75rem;
+  }
+}
+@media screen and (max-width: 479px) {
+  /* Em telas estreitas os balões absolutos se sobrepõem ao personagem.
+     Viram uma pilha em fluxo abaixo dele. */
+  .wm-stage {
+    aspect-ratio: auto;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .wm-character {
+    width: 70%;
+    max-width: 15rem;
+  }
+  .wm-bubbles {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .5rem;
+  }
+  .wm-bubble {
+    position: static;
+    max-width: none;
+  }
+}
+
+/* ── Logotipo ──────────────────────────────────────────────────────────────────
+   O logo do template era quadrado, então `.navbar_logo-link` tinha largura fixa
+   (10rem) com padding-right de 3.5rem, sobrando ~104px de caixa. O wordmark da
+   Novus é 4.57:1 e ficava esmagado nessa caixa. Aqui a caixa passa a acompanhar
+   a altura e a proporção segue livre. */
+.navbar_logo-link {
+  width: auto;
+  padding-right: 0;
+}
+.navbar_logo {
+  height: 100%;
+  width: auto;
+}
+.footer_logo {
+  width: 8.5rem;
+  height: auto;
+}
+
+/* ── Navbar: centralização real do menu ────────────────────────────────────────
+   O layout era flex com space-between: logo | links | botão. Como as colunas das
+   pontas têm larguras diferentes (logo 137px, botão 267px), o bloco do meio
+   ficava 65px à esquerda do centro real. Um grid de 1fr auto 1fr dá às pontas a
+   mesma largura, então a coluna do meio cai exatamente no centro.
+   Só ≥992: abaixo disso o hamburger assume e o grid não se aplica. */
+@media screen and (min-width: 992px) {
+  .navbar_content {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+  .navbar_content > .navbar_logo-link {
+    justify-self: start;
+  }
+  .navbar_content > .nav_buttons-wrap {
+    justify-self: end;
+  }
+}
+
+/* ── Navbar: hamburger menu at ≤991 ────────────────────────────────────────────
+   Desktop (≥992) uses inline links. At ≤991 the desktop link container is hidden
+   and the hamburger menu (src/styles/hamburger-nav.css) takes over. The hamburger
+   card is themed with the Novus design tokens. */
+.navbar {
+  --navbar-menu-bg: var(--base--navy);             /* pílula/card marinho (fechado e aberto) */
+  --navbar-menu-fg: var(--base--white);            /* texto + barras do toggle (sempre sobre o marinho) */
+  --navbar-accent: var(--base--blue);              /* ponto azul da marca */
+  --navbar-menu-font: Manrope, Arial, Helvetica, sans-serif;
+  --navbar-menu-font-mono: Manrope, Arial, Helvetica, sans-serif;
+}
+/* the navbar (which holds the hamburger card) must sit ABOVE the backdrop
+   (.navigation__dark-bg, z-index 999), otherwise the backdrop dims the menu too. */
+[data-navigation-status="active"] .navbar {
+  z-index: 1001;
+}
+/* softer backdrop (0.4 → 0.22): dims the background without darkening it too much */
+[data-navigation-status="active"] .navigation__dark-bg {
+  opacity: 0.22;
+}
+@media screen and (max-width: 991px) {
+  /* hide the desktop nav (inline links): the hamburger menu takes over */
+  .nav_wrap {
+    display: none;
+  }
+  /* hide the "Fale conosco" button on tablet/mobile: the hamburger menu already
+     includes it → avoids it sticking to the hamburger and the link repeating on screen */
+  .navbar .login-wrap {
+    display: none;
+  }
+}
+
+/* ── Sobre stats grid (.about_layout) — 3×2 bento ─────────────────────────────
+   The first two cards span 2 rows (tall in columns 1-2); the green and black cards
+   stack in column 3. */
+@media screen and (min-width: 992px) {
+  .about_layout > .card_about:nth-child(1),
+  .about_layout > .card_about:nth-child(2) {
+    grid-row: span 2;
+  }
+}
+
+/* ── FAQ accordion (single-open toggle) ───────────────────────────────────────
+   Animates the real height of .faq_bottom (0 → content height) with an ease-out
+   ~0.5s, using the grid-template-rows 0fr→1fr technique (pure CSS, smooth and
+   symmetric in both directions, robust to reflow). The grid needs a single child,
+   so the content is wrapped in .faq_bottom-inner. The base stylesheet already gives
+   .faq_bottom { overflow: clip } and .is-animated { rotate(90deg) } (the animated bar
+   forms a "+"); on open it rotates to 180° → horizontal bar = "−". */
+.faq_bottom {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq_item.is-open .faq_bottom {
+  grid-template-rows: 1fr;
+}
+.faq_bottom-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.icon-1x1-medium.is-animated {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq_item.is-open .icon-1x1-medium.is-animated {
+  transform: rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq_bottom,
+  .icon-1x1-medium.is-animated {
+    transition: none;
+  }
+}
+
+/* ── Arrow button (.button-arrow) — hover effect ──────────────────────────────
+   The dark fill (.button-arrow_bg) slides in from the right (translateX 100%→0,
+   opacity 0→1) and the text turns white with a 4px nudge. is-black variant: green
+   fill → dark text. Pure CSS. */
+.button-arrow_bg {
+  transform: translateX(100%);
+  transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.button-arrow:hover .button-arrow_bg {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.button-arrow_text {
+  transition: color 0.35s ease, transform 0.35s ease;
+}
+.button-arrow:hover .button-arrow_text {
+  transform: translateX(4px);
+  color: var(--text-color--text-on-primary); /* white */
+}
+/* is-black: the fill is light green → text goes dark for contrast */
+.button-arrow.is-black:hover .button-arrow_text {
+  color: var(--bg-color--bg-dark);
+}
+/* the arrow (svg inside the circle) nudges slightly left on hover
+   (translateX(-0.25rem)) */
+.button_container-arrow svg {
+  transition: transform 0.35s ease;
+}
+.button-arrow:hover .button_container-arrow svg {
+  transform: translateX(-0.25rem);
+}
+/* mobile portrait: when the button-arrow text is hidden (hide-mobile-portrait,
+   e.g. the newsletter Enviar), the wrap's padding-left makes the button oval.
+   Remove it → an even arrow circle (48×48). */
+@media (max-width: 479px) {
+  .button-arrow_wrap:has(> .button-arrow_text.hide-mobile-portrait) {
+    padding-left: 0;
+  }
+}
+
+/* ============================================================
+   Servicos cards (home · .section_services)
+   Two distinct behaviours sharing one markup:
+     · Desktop ≥992 (hover pointers): hover ACCORDION (see below).
+     · Tablet/Mobile ≤991: a Swiper slider (2-up ≥768, 1-up below)
+       driven by src/scripts/swiper-init.ts, with depoimentos-style
+       arrows. Swiper is destroyed ≥992 so the accordion owns desktop.
+
+   The markup is `.services_cards.swiper > .service_cards-wrapper
+   .swiper-wrapper > .service_card.swiper-slide`. The host/wrapper display
+   is force-fed here (specificity .section_services .x = win) so it never
+   depends on the base vs swiper/css load order.
+   ============================================================ */
+/* host panel is always a plain block; the wrapper is the flex/slider row.
+   Re-assert the panel padding here: swiper/css sets `.swiper{padding:0}`
+   which would otherwise flush the cards to the gray panel's edges. */
+.section_services .services_cards {
+  display: block;
+  padding: var(--_sizes---fixed--small);
+}
+
+/* ---- Desktop accordion ----
+   Each card's width animates 50%↔25% over 500ms ease-in-out; the active card's
+   image cross-fades and revelars horizontally only — it has a fixed height (the
+   open-state height, no width-coupled aspect ratio) so the row never changes
+   height when moving between cards. The accordion also responds to keyboard focus
+   (:focus-within). The idle "first card active" state is gated behind
+   :not(:hover):not(:focus-within) so the engaged-card rules win without any
+   specificity tug-of-war.                                               */
+@media (min-width: 992px) and (hover: hover) {
+  /* the swiper-wrapper is the accordion flex row on desktop (Swiper is
+     destroyed here, leaving only its base classes) */
+  .section_services .service_cards-wrapper {
+    display: flex;
+    width: 100%;
+    gap: var(--_sizes---fixed--small);
+    transform: none !important;
+  }
+  /* counter swiper/css .swiper-slide, which on desktop (Swiper destroyed,
+     base classes left) leaks three things that break the accordion:
+       · display:block  → kills the card's flex-flow:row, so .service_list
+         stops stretching to the card height and the white card collapses
+         to its content, leaving the gray wrapper showing through;
+       · height:100%    → suppresses align-items:stretch (unequal heights);
+       · flex-shrink:0  → percentage widths can't shrink to fit the gap.
+     Restore the base layout so the height chain + space-between fill. */
+  .services_cards .service_card {
+    display: flex;
+    width: 25%;
+    height: auto;
+    flex-shrink: 1;
+    transition: width 0.5s cubic-bezier(0.62, 0.05, 0.1, 1);
+  }
+  /* Lock the text column to a fixed width (the base min-width, which already
+     fits the narrowest collapsed card on desktop) so the copy never reflows to
+     a different line count as the card opens/closes — only the image animates.
+     Base is min:14rem / max:15rem, so the column would otherwise breathe ±1rem
+     mid-transition and the summary would jump a line. */
+  .services_cards .service_content {
+    min-width: 14rem;
+    max-width: 14rem;
+  }
+  .services_cards .service_img,
+  .services_cards .service_img.is-second,
+  .services_cards .service_img.is-third {
+    display: block;
+    /* Drop the base width-coupled aspect ratio (`padding-top:50%`) and pin a
+       fixed height (= the open-state height) so the image only ever grows
+       horizontally and the row keeps a constant height across hovers. */
+    padding-top: 0;
+    height: 18rem;
+    min-width: 0;
+    max-width: 0%;
+    opacity: 0;
+    transition: max-width 0.5s cubic-bezier(0.62, 0.05, 0.1, 1),
+                opacity 0.4s ease 0.05s;
+  }
+
+  /* idle — first card stays open */
+  .services_cards:not(:hover):not(:focus-within) .service_card.is-first {
+    width: 50%;
+  }
+  .services_cards:not(:hover):not(:focus-within)
+    .service_card.is-first
+    .service_img.is-first {
+    max-width: 100%;
+    opacity: 1;
+  }
+
+  /* engaged card — hovered or keyboard-focused */
+  .services_cards .service_card:hover,
+  .services_cards .service_card:focus-within {
+    width: 50%;
+  }
+  .services_cards .service_card:hover .service_img,
+  .services_cards .service_card:focus-within .service_img {
+    max-width: 100%;
+    opacity: 1;
+  }
+}
+
+@media (min-width: 992px) and (hover: hover) and (prefers-reduced-motion: reduce) {
+  .services_cards .service_card,
+  .services_cards .service_img {
+    transition: none;
+  }
+}
+
+/* ---- Tablet/Mobile slider arrows (≤991) ---- */
+.arrows_wrap.is-services {
+  display: none;
+}
+@media (max-width: 991px) {
+  .arrows_wrap.is-services {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--_sizes---fixed--medium);
+  }
+}
+
+/* ============================================================
+   Especialidade cards (home · .section_expertise)
+   Same slider treatment as Servicos, but the desktop layout is a
+   2×2 bento GRID (not a flex accordion). The grid lives on the
+   .swiper-wrapper; the host .expertise_cards is the swiper viewport
+   on ≤991 and a plain padded panel on desktop. Swiper is destroyed
+   ≥992 (see swiper-init.ts) — the same three swiper/css leaks that
+   affected Servicos are countered here: padding:0, display:block (would
+   flatten the grid / card flex), height:100%.
+   ============================================================ */
+.section_expertise .expertise_cards {
+  display: block;
+  padding: var(--_sizes---fixed--small);
+}
+/* counter swiper/css .swiper-slide { display:block; height:100% } at ALL sizes:
+   - display:block would stop the card being a centered flex column (the visual
+     would left-align and leave a gap on the right on tablet/mobile);
+   - height:100% suppresses the wrapper's align-items:stretch, so shorter cards
+     keep their content height and revelar the gray panel below them. height:auto
+     lets every slide stretch to the tallest (the wrapper height). */
+.section_expertise .expertise_card {
+  display: flex;
+  height: auto;
+}
+
+@media (min-width: 992px) {
+  /* keep the original 2×2 bento, now on the wrapper */
+  .section_expertise .expertise-cards-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--_sizes---fixed--small);
+    width: 100%;
+    transform: none !important;
+  }
+  /* the panel itself isn't clipped on desktop (orbit pills etc. can
+     sit flush to the card edges); swiper/css would set overflow:hidden */
+  .section_expertise .expertise_cards {
+    overflow: visible;
+  }
+  /* on desktop the grid (not the slide) drives the column width;
+     counter swiper/css .swiper-slide { width:100% } (height handled above) */
+  .expertise_cards .expertise_card {
+    width: auto;
+  }
+}
+
+/* ≤991 — Swiper owns the row; clip to the viewport */
+@media (max-width: 991px) {
+  .section_expertise .expertise_cards {
+    overflow: hidden;
+  }
+}
+
+.arrows_wrap.is-expertise {
+  display: none;
+}
+@media (max-width: 991px) {
+  .arrows_wrap.is-expertise {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--_sizes---fixed--medium);
+  }
+}
+
+/* ============================================================
+   Planos cards (home · .section_pricing only — the /pricing page
+   uses a bare <section> with the same .pricing_cards and is NOT
+   touched here). Same slider treatment as Especialidade: desktop is a
+   3-col grid (moved onto the .swiper-wrapper), ≤991 becomes a slider
+   (2-up ≥768, 1-up below) with depoimentos-style arrows; Swiper is
+   destroyed ≥992. Countering the three swiper/css leaks: padding:0,
+   display:block (flattens grid / card flex column), height:100%.
+   ============================================================ */
+.section_pricing .pricing_cards {
+  display: block;
+  padding: var(--_sizes---fixed--small);
+}
+/* card stays a flex column with equal height at ALL sizes (block would
+   break the column; height:100% would stop shorter cards stretching to
+   the wrapper and revelar the gray panel below them) */
+.section_pricing .pricing_card {
+  display: flex;
+  height: auto;
+}
+
+@media (min-width: 992px) {
+  /* keep the original 3-col grid, now on the wrapper */
+  .section_pricing .pricing-cards-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--_sizes---fixed--small);
+    width: 100%;
+    transform: none !important;
+  }
+  .section_pricing .pricing_cards {
+    overflow: visible;
+  }
+  /* grid (not the slide) drives the column width */
+  .pricing_cards .pricing_card {
+    width: auto;
+  }
+}
+
+/* ≤991 — Swiper owns the row; clip to the viewport */
+@media (max-width: 991px) {
+  .section_pricing .pricing_cards {
+    overflow: hidden;
+  }
+}
+
+.arrows_wrap.is-pricing {
+  display: none;
+}
+@media (max-width: 991px) {
+  .arrows_wrap.is-pricing {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--_sizes---fixed--medium);
+  }
+}
+
+/* ============================================================
+   Team cards (about · .sec_team)
+   Desktop: original 3-col grid (moved onto the .swiper-wrapper
+   .team_track). ≤991: Swiper slider (2-up ≥768, 1-up below) with
+   depoimentos-style arrows; Swiper destroyed ≥992 (swiper-init.ts).
+   The wrapper is a CLEAN .team_track (NOT .team_cards) so the base
+   ≤767 `.team_cards{display:flex; overflow:auto; margin -1rem}` native
+   carousel never reaches it — that overflow:auto fought Swiper's transform
+   on the blog (white cards). The host .team_cards is overridden to a plain
+   block viewport; counter the three swiper/css leaks: padding, display, height.
+   ============================================================ */
+.sec_team .team_cards {
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+/* slide: flex so the card stretches to equal height; counter swiper/css
+   .swiper-slide { display:block; height:100%; width:100% } */
+.sec_team .team_card-item {
+  display: flex;
+  height: auto;
+  width: auto;
+}
+.sec_team .team_card {
+  width: 100%;
+}
+/* Equalize the three cards: force every name onto 2 lines so the photos align.
+   The shorter middle name ("Erin Siphron") would otherwise fit on one line and
+   sit its photo higher. 230px wraps all three names to two lines with no word
+   overflow (220–235px is the safe window). */
+.sec_team .is-name {
+  max-width: 230px;
+}
+
+@media (min-width: 992px) {
+  /* original 3-col grid, now on the wrapper */
+  .sec_team .team_track {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--_sizes---fixed--small);
+    width: 100%;
+    transform: none !important;
+  }
+}
+
+/* ≤991 — Swiper owns the row; clip to the viewport */
+@media (max-width: 991px) {
+  .sec_team .team_cards {
+    overflow: hidden;
+  }
+}
+
+.arrows_wrap.is-team {
+  display: none;
+}
+@media (max-width: 991px) {
+  .arrows_wrap.is-team {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--_sizes---fixed--medium);
+  }
+}
+
+/* Team card hover: the corner arrow icon rotates 45° and the photo zooms to 1.1
+   — both ~0.5s ease-out. The zoom is clipped by .team_card { overflow:clip }.
+   Off under reduced-motion. */
+.sec_team .arrow_button svg,
+.sec_team .team_card-img .img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sec_team .team_card:hover .arrow_button svg {
+  transform: rotate(45deg);
+}
+.sec_team .team_card:hover .team_card-img .img {
+  transform: scale(1.1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sec_team .arrow_button svg,
+  .sec_team .team_card-img .img {
+    transition: none;
+  }
+  .sec_team .team_card:hover .arrow_button svg,
+  .sec_team .team_card:hover .team_card-img .img {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   Journey data (about · .sec_journey)
+   On mobile the four year items stack as a plain vertical flex (no sideways
+   scroll) instead of a horizontal scroll carousel. ≤767 only; tablet/desktop
+   keep the 2×2 grid.
+   ============================================================ */
+@media (max-width: 767px) {
+  .sec_journey .journey_data {
+    flex-flow: column;
+    overflow: visible;
+  }
+}
+
+/* ============================================================
+   Blog grid card hover (/blog · .sec_content-blog)
+   The photo zooms to 1.1 and the arrow_btn (green circle, bottom-right corner)
+   rotates 45° — ~0.5s ease-out, identical to the team hover. The zoom is clipped
+   by .content-blog_card_img { overflow:clip }. Off under reduced-motion.
+   (The teaser .blog_card has its own separate hover.)
+   ============================================================ */
+.sec_content-blog .content-blog_card_img .img,
+.sec_content-blog .arrow_btn {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sec_content-blog .content-blog_card:hover .content-blog_card_img .img {
+  transform: scale(1.1);
+}
+.sec_content-blog .content-blog_card:hover .arrow_btn {
+  transform: rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sec_content-blog .content-blog_card_img .img,
+  .sec_content-blog .arrow_btn {
+    transition: none;
+  }
+  .sec_content-blog .content-blog_card:hover .content-blog_card_img .img,
+  .sec_content-blog .content-blog_card:hover .arrow_btn {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   Contato hero layout (/contact · .sec_hero-contact)
+   The right block (bg image + form) spans 2 of the grid's 3 columns → left 1/3 ·
+   right 2/3, with the form centered in the wide block. ≥992 only (at ≤991 the
+   layout is flex-column and grid-column doesn't apply).
+   ============================================================ */
+@media (min-width: 992px) {
+  .sec_hero-contact .hero-contact_right {
+    grid-column: span 2;
+  }
+}
+/* Tablet (768–991): stack the two blocks as a vertical flex on tablet as well as
+   mobile, instead of keeping the 3-col grid. */
+@media (max-width: 991px) {
+  .sec_hero-contact .hero-contact_layout {
+    display: flex;
+    flex-flow: column;
+  }
+}
+
+/* ============================================================
+   Depoimentos cards (.section_depoimentos)
+   The depoimentos slider is always a Swiper (1→2→3 up), so the
+   swiper/css .swiper-slide { height:100% } leak resolves against the
+   content-driven swiper height and collapses the card to ~333px. The
+   card is fixed at 30rem (25rem ≤767). Re-assert those heights with
+   section specificity so they beat .swiper-slide.
+   ============================================================ */
+.section_depoimentos .depoimentos_card {
+  /* swiper/css .swiper-slide { display:block; height:100% } overrides the
+     card's own flex/height: block kills justify-content:space-between (so the
+     quote stops being pushed to the bottom) and height:100% collapses it.
+     Restore both (flex column, 30rem / 25rem ≤767). */
+  display: flex;
+  height: 30rem;
+}
+@media (max-width: 767px) {
+  .section_depoimentos .depoimentos_card {
+    height: 25rem;
+  }
+}
+
+/* Unlike the other sliders, depoimentos has no gray framing panel, so the
+   swiper/css overflow:hidden cuts the cards at the container edge — mid-screen,
+   leaving the page gutters empty as you slide. Let the slider overflow be
+   visible and clip at the viewport instead, so cards flow cleanly to/from the
+   screen edges with no hard mid-screen cut, and no horizontal page scroll. */
+.section_depoimentos {
+  overflow-x: clip;
+}
+.section_depoimentos .swiper {
+  overflow: visible;
+}
+
+/* Drop the frosted blur: layering backdrop-filter + mask-image on the same
+   .blur-card only renders in Chromium (WebKit/Firefox drop a backdrop-filter when
+   the element is also masked). Readability is already handled by the separate
+   .card-black-gradient, so keep the dark masked overlay and simply remove the blur
+   — no backdrop-filter = consistent in every browser. */
+.blur-card {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ============================================================
+   Blog teaser (home · .section_blog) — first 3 articles.
+   Mirrors the Depoimentos slider: Swiper is ALWAYS on
+   (slidesPerView 1→2(768)→3(992)), so on desktop the 3 cards sit side by
+   side like a grid and below they slide. The slide IS the .blog_card
+   (image as a direct child) and the track is .blog_track — a dedicated
+   class, so the .blog_cards grid + its ≤479 native overflow:auto carousel
+   CSS (which fought Swiper's transform and left the moved cards unpainted)
+   can no longer reach this section. spaceBetween owns the gaps; Swiper clips
+   its own overflow, so no peek and no h-scroll. The overlays come from the
+   .blog_card rules. */
+/* Force a true 1:1 card. padding-top:100% resolves against the CONTAINING
+   BLOCK width (the .blog_track flex wrapper, which spans all slides) — so with
+   spv 2/3 the card would grow far taller than wide. aspect-ratio resolves against
+   the slide's OWN width → square at every breakpoint (height:auto lets it drive,
+   over swiper's .swiper-slide height:100%). Scoped to .blog_swiper (teaser only)
+   so BlogRelated.astro — which also uses .section_blog/.blog_card in a plain grid
+   — is untouched. */
+.blog_swiper .blog_card {
+  padding-top: 0;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+/* Hover: the image zooms 1 → 1.1 within the card (clipped by the card's
+   overflow), ~0.4s ease-out (front-loaded outCubic curve). Applies to every
+   .blog_card (teaser + related). Disabled under reduced-motion, like the rest
+   of the project. */
+.blog_card .img {
+  transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.blog_card:hover .img {
+  transform: scale(1.1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .blog_card .img {
+    transition: none;
+  }
+  .blog_card:hover .img {
+    transform: none;
+  }
+}
+
+.arrows_wrap.is-blog {
+  display: none;
+}
+/* Arrows only ≤991 — at ≥992 all 3 teaser cards are visible (spv 3). */
+@media (max-width: 991px) {
+  .arrows_wrap.is-blog {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--_sizes---fixed--medium);
+  }
+}
+
+/* ============================================================
+   Servicos hero layout fit (secondary nav · .sec_h-services + .her_top,
+   both used only by ServicosHero so this stays scoped to that page).
+   The secondary navbar height (~66px) — the variant class is propagated to
+   .padding-global.is-navbar in Navbar.astro so its padding-bottom .25rem applies
+   — so calc(100svh - 5.5rem) fits correctly (≈10px clearance). Only the 8rem top
+   padding above the h1 is trimmed so the heading sits closer to the navbar (less
+   empty gap between nav and content). */
+.sec_h-services {
+  min-height: calc(100svh - 5.5rem);
+}
+.sec_h-services .her_top {
+  padding-top: 6rem;
+}
+/* ≤991 the hero is content-height (not full-viewport). space-between then has no
+   slack, so add a small row-gap to keep the header and the image loop apart
+   instead of stretching the hero to ~100vh. */
+@media (max-width: 991px) {
+  .sec_h-services {
+    min-height: auto;
+    row-gap: 2rem;
+  }
+  .sec_h-services .her_top {
+    padding-top: 4.5rem;
+  }
+}
+@media (max-width: 767px) {
+  .sec_h-services .her_top {
+    padding-top: 3.5rem;
+  }
+}
+
+/* Servicos list grid placement. The first card spans both rows of the narrow
+   left column (grid-area span 2 / span 1), with the two .is-one-row cards stacked
+   in the right column. The first card is the only .serv-service_card without
+   .is-one-row → give it a 2-row span. Grid only applies ≥992 (≤991 the layout is
+   flex-column), so this is desktop-only. */
+.serv-services_layout > .serv-service_card:not(.is-one-row) {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+/* Servicos depoimentos marquee (.testi_loop): a seamless looping marquee.
+   Same pattern as the hero image loop — 2 identical .testi-services_cards groups
+   laid side by side as max-content, so the xPercent:-50 in animations.ts moves
+   exactly one group and wraps invisibly. flex:none keeps each group at its natural
+   width. Full-bleed: the track overflows .container-large and clips at the viewport
+   (.page-wrapper{overflow:clip}), scrolling ~80px/s leftward. */
+.testi_loop {
+  width: max-content;
+}
+.testi-services_cards {
+  flex: none;
+}
+
+/* ServiceDetailHero — hero image 1:1 on mobile (≤767). When the layout stacks
+   (flex-column, sec height:auto), the right wrapper would collapse to ~40px because
+   its only child .img is position:absolute (inset:0 → contributes no height). Give
+   the wrapper a square box so the absolute img fills it 1:1. overflow:clip +
+   border-radius already round it. */
+@media screen and (max-width: 767px) {
+  .sec_hero-service .hero-service_right {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* ServiceBenefits — the benefits_layout bento "table". The image and the quote block
+   are placed BY CLASS (grid-column: span 2):
+     ≥992  4-col: IMG + QUOTE span 2 → Row1 feat·feat·IMG(span2) / Row2 QUOTE(span2)·feat·feat
+     ≤991  span 2 = full width (explicit 2-col @768–991, implicit 2-col @480–767) + QUOTE
+           moves last (order:9999) → feat·feat / IMG / feat·feat / QUOTE
+     ≤479  IMG + QUOTE back to span 1 → true single column, QUOTE still last
+   (.benefit_img padding-top:100% at ≤767 already squares the image — untouched.) */
+.benefits_layout > .benefit_img,
+.benefits_layout > .benefit_item.is-large {
+  grid-column: span 2;
+}
+@media screen and (max-width: 991px) {
+  .benefits_layout > .benefit_item.is-large {
+    order: 9999;
+  }
+}
+@media screen and (max-width: 479px) {
+  .benefits_layout > .benefit_img,
+  .benefits_layout > .benefit_item.is-large {
+    grid-column: span 1;
+  }
+}

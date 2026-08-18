@@ -1,0 +1,50 @@
+---
+// CardsLoop — carrossel 3D de cards, movido para fora da hero.
+// Ficava dentro de Hero.astro sobreposto ao background; agora ocupa a faixa logo
+// abaixo da hero (onde antes ficava o LogoLoop).
+//
+// Animação: `._3d .group` gira 360° em 40s (src/scripts/animations.ts → initHeroVisual).
+// O seletor é global, então funciona em qualquer lugar da página.
+// A entrada deixou de ser [data-hero-visual] (entrada no load, junto da hero) e
+// passou a ser [data-reveal] (entra quando a seção aparece no scroll).
+---
+<section class="section_cards-loop">
+  <div data-reveal class="_3d">
+    <div class="wrap">
+      <div class="group first">
+        <div class="img3d"><img src="/images/card.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-first"><img src="/images/card-3.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-second"><img src="/images/card-6.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-third"><img src="/images/card.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fourth"><img src="/images/card-3.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fifth"><img src="/images/card-6.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fifth"><img src="/images/card.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-six"><img src="/images/card-3.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-seven"><img src="/images/card-6.avif" loading="lazy" alt="" class="image3d"></div>
+      </div>
+      <div class="group second">
+        <div class="img3d"><img src="/images/card-1.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-first"><img src="/images/card-4.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-second"><img src="/images/card-7.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-third"><img src="/images/card-1.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fourth"><img src="/images/card-4.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fifth"><img src="/images/card-7.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fifth"><img src="/images/card-1.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-six"><img src="/images/card-4.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-seven"><img src="/images/card-7.avif" loading="lazy" alt="" class="image3d"></div>
+      </div>
+      <div class="group third">
+        <div class="img3d"><img src="/images/card-8.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-first"><img src="/images/card-2.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-second"><img src="/images/card-5.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-third"><img src="/images/card-8.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fourth"><img src="/images/card-2.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fifth"><img src="/images/card-5.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-fifth"><img src="/images/card-8.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-six"><img src="/images/card-2.avif" loading="lazy" alt="" class="image3d"></div>
+        <div class="img3d is-seven"><img src="/images/card-5.avif" loading="lazy" alt="" class="image3d"></div>
+      </div>
+    </div>
+  </div>
+  <div class="_3d_spacer"></div>
+</section>

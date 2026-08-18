@@ -1,0 +1,8 @@
+{
+  "name": "temlis-eagle",
+  "compatibility_date": "2026-06-03",
+  "assets": {
+    "directory": "./dist"
+  },
+  "workers_dev": true
+}

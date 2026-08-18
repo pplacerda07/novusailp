@@ -1,0 +1,32 @@
+---
+// Rota de teste isolada para o efeito de scroll. Não está linkada em lugar nenhum
+// e sai do índice dos buscadores. Serve para validar o efeito antes de decidir
+// se ele entra na home e em que seção.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import ScrollIcons from "../components/ScrollIcons.astro";
+---
+<BaseLayout
+  title="Teste do efeito de scroll | Novus AI"
+  description="Página de teste interna."
+  noindex={true}
+>
+  <Navbar variant="secondary" />
+  <main class="main-wrapper">
+    <section style="min-height:60svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 1.5rem">
+      <div>
+        <h2>Role para baixo</h2>
+        <p class="text-color-secondary">O efeito começa quando esta seção sair da tela.</p>
+      </div>
+    </section>
+
+    <ScrollIcons />
+
+    <section style="min-height:80svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 1.5rem">
+      <div>
+        <h2>Fim do efeito</h2>
+        <p class="text-color-secondary">Se você chegou aqui com tudo alinhado, o efeito está viável.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,31 @@
+{
+  "name": "Plano Enterprise",
+  "summary": "Solução definitiva de IA para grandes operações. Agentes ilimitados, integrações customizadas e suporte dedicado.",
+  "icon": "/images/cms/698e4863b7c4e4770533722e_mingcute_ai-fill.svg",
+  "card": "/images/cms/6961fe8f17d6448d5348850c_service-img.webp",
+  "headline": "O poder máximo da Inteligência Artificial",
+  "subtext": "Desenvolvido sob medida para sua empresa. Automação de ponta a ponta em todos os departamentos com segurança e escalabilidade.",
+  "features": [
+    {
+      "title": "Agentes Ilimitados",
+      "detail": "Crie múltiplos agentes para diferentes departamentos (Vendas, RH, Suporte)."
+    },
+    {
+      "title": "Integrações customizadas",
+      "detail": "Conexão nativa com sistemas legados e arquiteturas complexas."
+    },
+    {
+      "title": "Infraestrutura dedicada",
+      "detail": "Servidores isolados para máxima segurança e velocidade."
+    },
+    {
+      "title": "Suporte premium 24/7",
+      "detail": "Gerente de conta dedicado e SLA garantido."
+    }
+  ],
+  "quote": "\"A adoção do Plano Enterprise da Novus revolucionou nossa operação. A IA está presente em cada departamento de forma segura e eficiente.\"",
+  "author": "CTO",
+  "role": "Multinacional de Logística",
+  "avatar": "/images/cms/6961fed3966b530753b60b44_av-author.png",
+  "content": "<p>O Plano Enterprise é a solução mais completa do mercado para empresas que desejam escalar Inteligência Artificial com total controle e segurança.</p><p>‍</p><p>Não há limites para o que podemos automatizar. Desenhamos a arquitetura ideal, integramos todos os seus sistemas legados e implementamos múltiplos agentes de IA de ponta a ponta, tudo suportado por infraestrutura dedicada e um gerente de contas exclusivo.</p>"
+}

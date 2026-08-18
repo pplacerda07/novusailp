@@ -1,0 +1,110 @@
+---
+// Treinamento — responde a objeção "como a IA vai saber sobre a minha empresa?".
+//
+// Layout inspirado no bloco de documentação da AbacatePay: um cartão grande com
+// o print do produto em perspectiva, sangrando para fora da borda e desaparecendo
+// numa máscara, e a copy abaixo.
+//
+import PainelMock from "./PainelMock.astro";
+
+// Formatos que alimentam o treinamento. Ficam encostados na borda esquerda do
+// cartão, como se estivessem entrando no painel: a pessoa entende o que a IA
+// consome sem precisar de uma frase explicando.
+const fontes = [
+  { nome: "PDF", cor: "is-azul", icone: "pdf" },
+  { nome: "Áudio", cor: "is-verde", icone: "audio" },
+  { nome: "Vídeo", cor: "is-marinho", icone: "video" },
+  { nome: "Planilha", cor: "is-ceu", icone: "planilha" },
+  { nome: "Instruções", cor: "is-azul", icone: "texto" },
+];
+---
+
+<section class="tr-section">
+  <div class="padding-global">
+    <div class="container-large">
+
+      <!-- Sem data-reveal / data-stagger aqui: a entrada desta seção é
+           orquestrada numa timeline só, em src/scripts/treinamento.ts. Se os
+           atributos genéricos voltarem, cada pedaço ganha um gatilho próprio e
+           a sequência se perde. -->
+      <h2 class="tr-headline">
+        Como o <strong class="nome-produto">VendeAI</strong> vai saber sobre a minha empresa?
+      </h2>
+
+      <!-- Visual: o cartão do painel e, encostada na borda esquerda dele, a
+           pilha de formatos que alimenta o treinamento. -->
+      <div class="tr-visual">
+        <ul class="tr-fontes">
+          {fontes.map((f) => (
+            <li class="tr-fonte">
+              <span class={`tr-fonte_icone ${f.cor}`}>
+                {f.icone === "pdf" ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" /><path d="M14 3v5h5" />
+                  </svg>
+                ) : f.icone === "audio" ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                    <path d="M4 11v2" /><path d="M8 8v8" /><path d="M12 5v14" /><path d="M16 8v8" /><path d="M20 11v2" />
+                  </svg>
+                ) : f.icone === "video" ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="6" width="12" height="12" rx="2.5" /><path d="M15 10.5 21 7v10l-6-3.5Z" />
+                  </svg>
+                ) : f.icone === "planilha" ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="16" rx="2.5" /><path d="M3 10h18" /><path d="M9 10v10" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                    <path d="M5 7h14" /><path d="M5 12h14" /><path d="M5 17h9" />
+                  </svg>
+                )}
+              </span>
+              <span class="tr-fonte_nome">{f.nome}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="tr-card">
+          <div class="tr-stage">
+            <!-- Painel recriado em HTML/CSS no lugar do print: texto nítido em
+                 qualquer zoom, cores saindo dos tokens da marca e nenhum arquivo
+                 de imagem para baixar. -->
+            <div class="tr-shot">
+              <PainelMock />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copy -->
+      <div class="tr-copy">
+        <p class="tr-destaque">
+          Nosso time senta com a sua empresa e configura tudo em
+          <strong>30 minutos</strong>.
+        </p>
+
+        <!-- Segunda frase separada da primeira de propósito: a de cima precisa
+             caber em uma linha só, e juntar as duas quebraria isso. -->
+        <p class="tr-apoio">
+          Usamos o material que você já tem para dar ao agente o conhecimento de um vendedor experiente.
+        </p>
+
+        <div class="tr-cta">
+          <!-- TODO: a rota /treinamento ainda não existe. Precisa ser criada
+               antes de publicar, senão este botão leva para um 404. -->
+          <a href="/treinamento" class="button is-hero-invert is-grande w-inline-block">
+            <div class="text-button-wrap">
+              <div>Quero saber mais sobre o treinamento da IA</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  import "../scripts/treinamento.ts";
+</script>
