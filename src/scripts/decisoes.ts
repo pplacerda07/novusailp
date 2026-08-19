@@ -83,7 +83,13 @@ if (secao && !reduzido) {
     end: () => `+=${window.innerHeight * (SVH_TOTAL / 100)}px`,
     pin: true,
     pinSpacing: true,
-    scrub: movel ? 0.4 : true,
+    // Ver a nota em scroll-icons.ts: em toque, prender por transform em vez de
+    // position: fixed evita o Safari recompor a tela inteira a cada quadro.
+    pinType: ScrollTrigger.isTouch === 1 ? "transform" : "fixed",
+    // Com normalizeScroll ligado, o scroll já chega sincronizado com o quadro:
+    // a suavização extra do scrub vira atraso perceptível. `true` acompanha o
+    // dedo sem defasagem.
+    scrub: true,
     invalidateOnRefresh: true,
     // Segunda seção pinada da página. Como um pin desloca tudo que vem abaixo,
     // as duas precisam recalcular antes dos ScrollTriggers comuns.

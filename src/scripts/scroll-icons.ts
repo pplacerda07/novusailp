@@ -174,10 +174,15 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     end: () => `+=${window.innerHeight * (movel() ? 1.6 : 4)}px`,
     pin: true,
     pinSpacing: true,
-    // Scrub menor no celular: 1 significa um segundo para alcançar a posição do
-    // dedo, o que ali vira sensação de atraso. 0.5 responde mais rápido e ainda
-    // suaviza o suficiente.
-    scrub: movel() ? 0.5 : 1,
+    // Em aparelho de toque a seção é presa por transform, não por position:
+    // fixed. O Safari trata elemento fixo durante a rolagem como caso especial e
+    // recompõe a tela inteira a cada quadro; com transform ele só desloca uma
+    // camada que já está na GPU. No desktop o fixed é mais previsível.
+    pinType: ScrollTrigger.isTouch === 1 ? "transform" : "fixed",
+    // No celular, com normalizeScroll ligado, o scroll já chega sincronizado
+    // com o quadro. A suavização extra do scrub, que existia para disfarçar a
+    // dessincronia, agora só adiciona atraso: `true` acompanha o dedo direto.
+    scrub: movel() ? true : 1,
     invalidateOnRefresh: true,
     // Um pin desloca tudo que vem abaixo dele na página. Os outros ScrollTriggers
     // do site nascem em animations.ts, num bundle separado, sem ordem garantida

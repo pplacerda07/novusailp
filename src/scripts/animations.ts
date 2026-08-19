@@ -9,16 +9,32 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ───────── Correção do scroll no celular ─────────
+// ───────── Correções de scroll no celular ─────────
+//
+// 1. ignoreMobileResize
 // No iOS a barra de endereço aparece e some conforme a pessoa rola, e isso muda
 // a altura da janela. O ScrollTrigger enxerga essa mudança como um resize e
-// remede tudo, o que faz as seções presas (pin) darem um salto: é o efeito de a
-// página "puxar para cima" e a animação travar no meio.
-//
-// ignoreMobileResize manda ignorar essa variação de altura, que não é um resize
-// de verdade. Fica aqui porque este arquivo carrega em todas as páginas e a
-// configuração é global, valendo também para as seções de ícones e de cartões.
+// remede tudo, o que faz as seções presas (pin) darem um salto.
 ScrollTrigger.config({ ignoreMobileResize: true });
+
+// 2. normalizeScroll
+// Esta é a correção principal de fluidez no iOS, e a razão de o problema
+// persistir mesmo num aparelho rápido.
+//
+// O Safari em toque entrega o scroll numa thread separada da renderização. O
+// dedo move a página imediatamente, mas o JavaScript que reposiciona os
+// elementos só roda depois, no quadro seguinte. Numa página comum ninguém nota;
+// numa seção presa, em que TODO o conteúdo é posicionado por script, o conteúdo
+// chega sempre um quadro atrasado em relação ao fundo. É isso que se vê como
+// tremor e queda de fps, e nenhum processador resolve, porque não é falta de
+// capacidade e sim dessincronia.
+//
+// normalizeScroll faz o GSAP assumir o scroll por toque e aplicar a rolagem no
+// mesmo quadro em que atualiza as animações. Só é ligado em aparelho de toque:
+// no desktop o scroll nativo já é síncrono e interceptá-lo só atrapalharia.
+if (ScrollTrigger.isTouch === 1) {
+  ScrollTrigger.normalizeScroll(true);
+}
 
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
