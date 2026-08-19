@@ -1331,83 +1331,6 @@
   .fq-resposta { padding: 0 1rem 1.25rem 2.75rem; }
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   AJUSTES DE CELULAR
-   Agrupados aqui de propósito: são correções de um problema só (o site foi
-   desenhado no desktop) e ficam mais fáceis de revisar juntas.
-   ════════════════════════════════════════════════════════════════════════════ */
-
-@media screen and (max-width: 767px) {
-  /* ── Hero ──────────────────────────────────────────────────────────────────
-     A arte é 2,11:1 (bem deitada) e a tela do celular é ~1:2,2 (bem em pé).
-     Com object-fit: cover o navegador precisa ampliar tanto para preencher que
-     sobra só uma tira do meio: some a loja, some o rapaz do notebook, e fica o
-     calendário solto que aparecia no print.
-     Aqui ela passa a `contain`, encostada embaixo, e o resto da seção recebe o
-     mesmo azul do fundo da arte, então a emenda não aparece. */
-  .section_hero {
-    background-color: #0166CE;
-  }
-  .img.is-hero {
-    object-fit: contain;
-    object-position: center bottom;
-    top: auto;
-    bottom: 0;
-    height: auto;
-  }
-  /* O título tinha 6 linhas a 44px. A escala responsiva do template não previa
-     frase longa nesse tamanho de tela. */
-  .hero_headline h1 {
-    font-size: 2.125rem;
-    line-height: 1.2;
-  }
-  .hero_headline {
-    max-width: none;
-  }
-
-  /* ── Botões ────────────────────────────────────────────────────────────────
-     A classe .button do template tem white-space: nowrap. No desktop tudo bem,
-     mas "Quero saber mais sobre o treinamento da IA" dá 476px numa tela de
-     440px: o botão vazava do cartão. Aqui o texto pode quebrar. */
-  .button {
-    white-space: normal;
-    text-align: center;
-    max-width: 100%;
-  }
-  .button.is-hero-invert.is-grande {
-    min-height: 2.75rem;
-    padding: .625rem 1.25rem;
-    font-size: .8125rem;
-    line-height: 1.35;
-  }
-
-  /* ── Seções com boneco: texto centralizado ─────────────────────────────────
-     Em coluna única o texto alinhado à esquerda fica desequilibrado, porque a
-     ilustração logo abaixo é centrada. */
-  .wm-copy,
-  .tg-copy {
-    align-items: center;
-    text-align: center;
-  }
-
-  /* ── Contraste com o chatbot ───────────────────────────────────────────────
-     O tamanho da figura é definido no bloco de 479px mais abaixo, que vem
-     depois deste e venceria a disputa. Aqui só o texto dos balões. */
-  .wm-bubble {
-    font-size: .75rem;
-    padding: .4375rem .625rem;
-  }
-
-  /* ── Treinamento ───────────────────────────────────────────────────────────
-     O painel é decorativo nesse tamanho: reduzo para não roubar altura. */
-  .tr-shot {
-    --tr-escala: .34;
-  }
-  .tr-card {
-    aspect-ratio: 3 / 2;
-  }
-}
-
 /* ── Nome do produto ───────────────────────────────────────────────────────────
    VendeAI é o produto principal. Classe global (não tem prefixo de seção) porque
    o nome vai reaparecer em outras partes do site e precisa ter sempre o mesmo
@@ -1480,12 +1403,16 @@
     padding: .3125rem .5rem;
     border-radius: .625rem;
   }
-  .wm-bubble.is-1 { top: 1%; left: -4%; }
-  .wm-bubble.is-2 { top: 0; right: -4%; }
-  .wm-bubble.is-3 { top: 34%; left: -6%; }
-  .wm-bubble.is-4 { top: 31%; right: -6%; }
-  .wm-bubble.is-5 { bottom: 24%; left: -6%; }
-  .wm-bubble.is-6 { bottom: 4%; right: -4%; }
+  /* Deslocamento zero, não negativo. No desktop o negativo joga os balões para
+     fora do palco de propósito, e sobra margem na página para eles aparecerem.
+     No celular o palco já ocupa a largura toda, então o negativo os empurrava
+     para fora da tela e o overflow da seção cortava metade de cada um. */
+  .wm-bubble.is-1 { top: 1%; left: 0; }
+  .wm-bubble.is-2 { top: 0; right: 0; }
+  .wm-bubble.is-3 { top: 34%; left: 0; }
+  .wm-bubble.is-4 { top: 31%; right: 0; }
+  .wm-bubble.is-5 { bottom: 24%; left: 0; }
+  .wm-bubble.is-6 { bottom: 4%; right: 0; }
 }
 
 /* ── Logotipo ──────────────────────────────────────────────────────────────────
@@ -2215,5 +2142,131 @@
   .benefits_layout > .benefit_img,
   .benefits_layout > .benefit_item.is-large {
     grid-column: span 1;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ESTE BLOCO FICA NO FIM DO ARQUIVO DE PROPÓSITO.
+
+   São overrides de celular, e várias das regras que eles precisam vencer têm a
+   mesma especificidade (.wm-lead sobrescrevendo .wm-lead, por exemplo). Nesse
+   empate quem vale é quem vem por último. Já perdemos tempo duas vezes com
+   regra de celular que não aplicava por estar acima da regra original.
+
+   Regra: ajuste de responsividade novo entra AQUI, no fim.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   AJUSTES DE CELULAR
+   Agrupados aqui de propósito: são correções de um problema só (o site foi
+   desenhado no desktop) e ficam mais fáceis de revisar juntas.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@media screen and (max-width: 767px) {
+  /* ── Hero ──────────────────────────────────────────────────────────────────
+     A arte é 2,11:1 (bem deitada) e a tela do celular é ~1:2,2 (bem em pé).
+     Com object-fit: cover o navegador precisa ampliar tanto para preencher que
+     sobra só uma tira do meio: some a loja, some o rapaz do notebook, e fica o
+     calendário solto que aparecia no print.
+     Aqui ela passa a `contain`, encostada embaixo, e o resto da seção recebe o
+     mesmo azul do fundo da arte, então a emenda não aparece. */
+  .section_hero {
+    background-color: #0166CE;
+  }
+  .img.is-hero {
+    object-fit: contain;
+    object-position: center bottom;
+    top: auto;
+    bottom: 0;
+    height: auto;
+  }
+  /* O título tinha 6 linhas a 44px. A escala responsiva do template não previa
+     frase longa nesse tamanho de tela. */
+  .hero_headline h1 {
+    font-size: 2.125rem;
+    line-height: 1.2;
+  }
+  .hero_headline {
+    max-width: none;
+  }
+
+  /* ── Botões ────────────────────────────────────────────────────────────────
+     A classe .button do template tem white-space: nowrap. No desktop tudo bem,
+     mas "Quero saber mais sobre o treinamento da IA" dá 476px numa tela de
+     440px: o botão vazava do cartão. Aqui o texto pode quebrar. */
+  .button {
+    white-space: normal;
+    text-align: center;
+    max-width: 100%;
+  }
+  .button.is-hero-invert.is-grande {
+    min-height: 2.75rem;
+    padding: .625rem 1.25rem;
+    font-size: .8125rem;
+    line-height: 1.35;
+  }
+
+  /* ── Títulos: no máximo duas linhas ────────────────────────────────────────
+     A escala responsiva do template deixa o h2 em 44px no celular, e com isso
+     toda headline caía em três linhas. Título de três linhas empurra o resto da
+     seção para fora da tela e faz a página parecer mais densa do que é. */
+  .wm-headline,
+  .tg-headline,
+  .rv-headline,
+  .fq-headline,
+  .tr-headline {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+  /* A do blog é bem mais longa que as outras (91 caracteres) e precisa de um
+     grau a menos para não virar quatro linhas. */
+  .ct-headline {
+    font-size: 1.4375rem;
+    line-height: 1.25;
+  }
+
+  /* ── Seções com boneco: texto centralizado ─────────────────────────────────
+     Em coluna única o texto alinhado à esquerda fica desequilibrado, porque a
+     ilustração logo abaixo é centrada. */
+  .wm-copy,
+  .tg-copy {
+    align-items: center;
+    text-align: center;
+  }
+  /* Corpo menor e mais estreito. A 20px, com as linhas centralizadas e de
+     comprimentos bem diferentes, dois parágrafos viravam um bloco irregular que
+     parecia muito mais texto do que é. text-wrap: pretty empareia as linhas e
+     evita palavra sozinha na última. */
+  .wm-lead,
+  .tg-lead,
+  .rv-lead,
+  .ct-lead,
+  .fq-lead,
+  .tr-apoio {
+    font-size: 1rem;
+    line-height: 1.55;
+    max-width: 30rem;
+    text-wrap: pretty;
+  }
+  .tr-destaque {
+    font-size: 1.25rem;
+  }
+
+  /* ── Contraste com o chatbot ───────────────────────────────────────────────
+     O tamanho da figura é definido no bloco de 479px mais abaixo, que vem
+     depois deste e venceria a disputa. Aqui só o texto dos balões. */
+  .wm-bubble {
+    font-size: .75rem;
+    padding: .4375rem .625rem;
+  }
+
+  /* ── Treinamento ───────────────────────────────────────────────────────────
+     O painel é decorativo nesse tamanho: reduzo para não roubar altura. */
+  .tr-shot {
+    --tr-escala: .34;
+  }
+  .tr-card {
+    aspect-ratio: 3 / 2;
   }
 }

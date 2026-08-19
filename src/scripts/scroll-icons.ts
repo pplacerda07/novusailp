@@ -71,6 +71,19 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   let vw = 0;
   let vh = 0;
 
+  // Todas as medidas vivem no mesmo sistema: coordenadas da janela com a seção
+  // presa, ou seja, com o topo dela em 0.
+  //
+  // A sutileza que quebrou a versão anterior: `.sc-icons` é position: fixed, ou
+  // seja, ancorada na janela e não na seção. Medir a posição dela em relação à
+  // seção só faria sentido se a seção já estivesse presa no topo, mas o refresh
+  // acontece com a seção ainda lá embaixo da página. O resultado era um
+  // deslocamento enorme, e os clones voavam para fora da tela: eram os ícones
+  // "sumidos".
+  //
+  // Então: o que é fixo entra em coordenada de janela direto, e o que vive
+  // dentro da seção entra relativo à seção. Com a seção presa no topo, os dois
+  // coincidem.
   const medir = () => {
     vw = window.innerWidth;
     vh = window.innerHeight;
@@ -78,21 +91,25 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     gsap.set(icones, { clearProps: "transform" });
     gsap.set(iconeEls, { clearProps: "transform" });
 
-    const base = secao.getBoundingClientRect();
-    const rel = (r: DOMRect): Ponto => ({
-      x: r.left - base.left + r.width / 2,
-      y: r.top - base.top + r.height / 2,
+    const centro = (r: DOMRect): Ponto => ({
+      x: r.left + r.width / 2,
+      y: r.top + r.height / 2,
     });
 
     const rIcones = icones.getBoundingClientRect();
-    const cIcones = rel(rIcones);
+    const c = centro(rIcones);
     caixaIcones = {
-      cx: cIcones.x,
-      cy: cIcones.y,
+      cx: c.x,
+      cy: c.y,
       largura: iconeEls[0]?.getBoundingClientRect().width || 1,
     };
-    centroIcone = iconeEls.map((el) => rel(el.getBoundingClientRect()));
-    centroSlot = slots.map((el) => rel(el.getBoundingClientRect()));
+    centroIcone = iconeEls.map((el) => centro(el.getBoundingClientRect()));
+
+    const base = secao.getBoundingClientRect();
+    centroSlot = slots.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.left - base.left + r.width / 2, y: r.top - base.top + r.height / 2 };
+    });
   };
 
   // Onde um ícone para depois de a fileira inteira ser escalada e movida.
@@ -151,7 +168,10 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     // visitante tempo demais numa seção só.
     // No celular caem para 2,5: cada tela presa é mais dedo de rolagem, e o
     // aparelho ainda tem que animar tudo isso com menos folga de processamento.
-    end: () => `+=${window.innerHeight * (movel() ? 2.5 : 4)}px`,
+    // No celular 1,6 tela. Antes eram 2,5 e a sensação era de rolar muito para
+    // pouca coisa acontecer, porque na tela pequena cada tela presa custa vários
+    // deslizes de dedo.
+    end: () => `+=${window.innerHeight * (movel() ? 1.6 : 4)}px`,
     pin: true,
     pinSpacing: true,
     // Scrub menor no celular: 1 significa um segundo para alcançar a posição do

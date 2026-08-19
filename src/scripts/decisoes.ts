@@ -28,9 +28,9 @@ if (secao && !reduzido) {
   const total = versos.length;
 
   // No celular todas as fases encolhem na mesma proporção: o efeito continua
-  // igual, só dura menos dedo de rolagem. 460svh viram 276svh.
+  // igual, só dura menos dedo de rolagem. 460svh viram 184svh.
   const movel = window.innerWidth <= 767;
-  const f = movel ? 0.6 : 1;
+  const f = movel ? 0.4 : 1;
 
   const ENTRADA_FIM = 80 * f;
   const GIRO = 150 * f;
