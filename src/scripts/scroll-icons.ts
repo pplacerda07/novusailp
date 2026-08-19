@@ -193,8 +193,12 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     },
     // Ao sair da seção pelos dois lados, descarta os clones. Sem isso eles
     // continuavam existindo à toa depois do efeito terminar.
-    onLeave: limparClones,
-    onLeaveBack: limparClones,
+    //
+    // Zerar a fase junto é obrigatório: as fases só fazem o trabalho de montagem
+    // quando detectam mudança, então voltar para a fase 4 com `fase` ainda em 4
+    // pularia a recriação e os ícones não apareceriam na segunda passada.
+    onLeave: () => { limparClones(); fase = -1; },
+    onLeaveBack: () => { limparClones(); fase = -1; },
     onUpdate: (self) => {
       const p = self.progress;
       const escalaFinal = tamanhoFinal() / caixaIcones.largura;

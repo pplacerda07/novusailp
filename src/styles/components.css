@@ -2269,4 +2269,27 @@
   .tr-card {
     aspect-ratio: 3 / 2;
   }
+
+  /* ── Cartões de decisão ────────────────────────────────────────────────────
+     Cartão menor porque ele gira. A 80% da largura (352px numa tela de 440),
+     inclinado no leque, a caixa dele passava de 480px e sobrava um terço para
+     fora da tela. As inclinações também foram reduzidas, no script. */
+  .dc-card {
+    width: 68%;
+    padding: 1.75rem 1.375rem;
+  }
+  .dc-card h3 {
+    font-size: 1.375rem;
+  }
+  .dc-card p {
+    font-size: .8125rem;
+  }
+  .dc-icone {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .dc-icone svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
