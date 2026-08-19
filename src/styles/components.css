@@ -1381,6 +1381,15 @@
     line-height: 1.35;
   }
 
+  /* ── Seções com boneco: texto centralizado ─────────────────────────────────
+     Em coluna única o texto alinhado à esquerda fica desequilibrado, porque a
+     ilustração logo abaixo é centrada. */
+  .wm-copy,
+  .tg-copy {
+    align-items: center;
+    text-align: center;
+  }
+
   /* ── Contraste com o chatbot ───────────────────────────────────────────────
      O tamanho da figura é definido no bloco de 479px mais abaixo, que vem
      depois deste e venceria a disputa. Aqui só o texto dos balões. */
@@ -1458,23 +1467,25 @@
 @media screen and (max-width: 479px) {
   /* Os balões continuam em volta do personagem, como no desktop: empilhá-los
      embaixo desmontava a cena (a graça é o cara cercado das respostas do bot).
-     O personagem encolhe para abrir as duas colunas laterais onde eles cabem. */
+     Quem encolhe são os balões, não o boneco: na tentativa anterior o boneco
+     ficou com 118px para abrir espaço e virou um nanico no meio da seção. */
   .wm-character {
-    width: 40%;
-    max-width: 8rem;
+    width: 54%;
+    max-width: 10.5rem;
   }
   .wm-bubble {
-    max-width: 8.5rem;
-    font-size: .6875rem;
-    padding: .375rem .5625rem;
-    border-radius: .75rem;
+    max-width: 6.75rem;
+    font-size: .625rem;
+    line-height: 1.3;
+    padding: .3125rem .5rem;
+    border-radius: .625rem;
   }
-  .wm-bubble.is-1 { top: 2%; left: -5%; }
-  .wm-bubble.is-2 { top: 0; right: -5%; }
-  .wm-bubble.is-3 { top: 36%; left: -7%; }
-  .wm-bubble.is-4 { top: 33%; right: -7%; }
-  .wm-bubble.is-5 { bottom: 22%; left: -7%; }
-  .wm-bubble.is-6 { bottom: 3%; right: -5%; }
+  .wm-bubble.is-1 { top: 1%; left: -4%; }
+  .wm-bubble.is-2 { top: 0; right: -4%; }
+  .wm-bubble.is-3 { top: 34%; left: -6%; }
+  .wm-bubble.is-4 { top: 31%; right: -6%; }
+  .wm-bubble.is-5 { bottom: 24%; left: -6%; }
+  .wm-bubble.is-6 { bottom: 4%; right: -4%; }
 }
 
 /* ── Logotipo ──────────────────────────────────────────────────────────────────

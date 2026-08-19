@@ -10,20 +10,27 @@
 //   0.75 → 1     os trechos de texto aparecem em ordem aleatória
 //
 // ─────────────────────────────────────────────────────────────────────────────
-// GEOMETRIA MEDIDA UMA VEZ, NÃO A CADA QUADRO
+// TRÊS DECISÕES QUE EXISTEM POR CAUSA DE PROBLEMA REAL
 //
-// A primeira versão chamava getBoundingClientRect() dentro do onUpdate, sobre
-// elementos que o próprio onUpdate acabara de transformar. Isso trazia dois
-// problemas, os dois visíveis no celular:
+// 1. Geometria medida uma vez, não a cada quadro.
+//    A primeira versão chamava getBoundingClientRect() dentro do onUpdate, sobre
+//    elementos que ele mesmo acabara de transformar, ~13 vezes por quadro. Ler
+//    depois de escrever força recálculo de layout na hora, e a posição nova saía
+//    da posição já transformada: descendo dava um resultado, subindo dava outro,
+//    e os ícones ficavam tremendo. Agora medimos no refresh e o onUpdate só
+//    escreve.
 //
-//   1. Ler logo depois de escrever obriga o navegador a recalcular o layout na
-//      hora, várias vezes por quadro. É o que derrubava o frame rate.
-//   2. A posição nova era calculada a partir da posição já transformada, ou
-//      seja, dependia do quadro anterior. Rolando para baixo dava um resultado,
-//      rolando para cima dava outro, e os ícones ficavam subindo e descendo.
+// 2. Clones dentro da seção, não no <body>.
+//    Eram `position: fixed` pendurados no body. Ao passar da seção o trigger
+//    para de atualizar e eles ficavam grudados na tela por cima do resto da
+//    página. Dentro da seção, com position absolute, eles rolam junto e somem
+//    sozinhos.
 //
-// Agora as medidas são tiradas uma vez, com os transforms limpos, e guardadas.
-// O onUpdate só escreve.
+// 3. Escrita só quando o valor muda.
+//    O onUpdate reescrevia cor de fundo, opacidade dos cinco trechos e o reset
+//    dos ícones a cada quadro, mesmo sem nada ter mudado. Cada escrita dessas
+//    custa recálculo de estilo. Agora o que é por fase é escrito na virada da
+//    fase, e por quadro fica só o que realmente varia.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { gsap } from "gsap";
@@ -44,6 +51,8 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   const BRANCO = "#FFFFFF";
   const AZUL = "#015EFD";
 
+  const movel = () => window.innerWidth <= 767;
+
   // Os trechos aparecem fora de ordem: dá a sensação de texto se materializando
   // em vez de ser digitado.
   const ordem = trechos.map((el, i) => ({ el, i }));
@@ -52,9 +61,9 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     [ordem[i], ordem[j]] = [ordem[j], ordem[i]];
   }
 
-  const tamanhoFinal = () => (window.innerWidth <= 991 ? 30 : 60);
+  const tamanhoFinal = () => (window.innerWidth <= 991 ? 26 : 60);
 
-  // ── Cache de geometria ────────────────────────────────────────────────────
+  // ── Cache de geometria (tudo relativo à seção) ────────────────────────────
   type Ponto = { x: number; y: number };
   let caixaIcones = { cx: 0, cy: 0, largura: 1 };
   let centroIcone: Ponto[] = [];
@@ -66,34 +75,27 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     vw = window.innerWidth;
     vh = window.innerHeight;
 
-    // Limpa os transforms para medir a posição natural dos elementos.
     gsap.set(icones, { clearProps: "transform" });
     gsap.set(iconeEls, { clearProps: "transform" });
 
+    const base = secao.getBoundingClientRect();
+    const rel = (r: DOMRect): Ponto => ({
+      x: r.left - base.left + r.width / 2,
+      y: r.top - base.top + r.height / 2,
+    });
+
     const rIcones = icones.getBoundingClientRect();
+    const cIcones = rel(rIcones);
     caixaIcones = {
-      cx: rIcones.left + rIcones.width / 2,
-      cy: rIcones.top + rIcones.height / 2,
+      cx: cIcones.x,
+      cy: cIcones.y,
       largura: iconeEls[0]?.getBoundingClientRect().width || 1,
     };
-    centroIcone = iconeEls.map((el) => {
-      const r = el.getBoundingClientRect();
-      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-    });
-
-    // Os slots vivem dentro da seção. Enquanto ela está presa, fica fixa no topo
-    // da janela, então a posição relativa à seção vale como posição na tela.
-    const rSecao = secao.getBoundingClientRect();
-    centroSlot = slots.map((el) => {
-      const r = el.getBoundingClientRect();
-      return {
-        x: r.left - rSecao.left + r.width / 2,
-        y: r.top - rSecao.top + r.height / 2,
-      };
-    });
+    centroIcone = iconeEls.map((el) => rel(el.getBoundingClientRect()));
+    centroSlot = slots.map((el) => rel(el.getBoundingClientRect()));
   };
 
-  // Onde um ícone vai parar depois de a fileira inteira ser escalada e movida.
+  // Onde um ícone para depois de a fileira inteira ser escalada e movida.
   // A origem do transform é o centro da fileira, então o ponto p vira
   // centro + escala * (p - centro) + deslocamento.
   const posDepois = (i: number, escala: number, dx: number, dy: number): Ponto => ({
@@ -111,18 +113,35 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     clones = iconeEls.map((icone) => {
       const c = icone.cloneNode(true) as HTMLElement;
       c.className = "sc-dup";
-      // Fixed, e não absolute: a seção presa também é fixa, então os dois
-      // compartilham o mesmo sistema de coordenadas e não é preciso somar a
-      // rolagem da página a cada quadro.
-      c.style.position = "fixed";
+      c.style.position = "absolute";
+      // Âncora no canto da seção: daí em diante quem posiciona é o transform.
+      c.style.left = "0";
+      c.style.top = "0";
       c.style.width = `${lado}px`;
       c.style.height = `${lado}px`;
       c.style.zIndex = "3";
-      c.style.willChange = "transform";
       c.setAttribute("aria-hidden", "true");
-      document.body.appendChild(c);
+      // Dentro da seção: quando ela sai da tela, os clones saem junto.
+      secao.appendChild(c);
       return c;
     });
+  };
+
+  // ── Estado, para não reescrever o que não mudou ───────────────────────────
+  let fase = -1;
+  let corAtual = "";
+  let trechosZerados = false;
+
+  const pintar = (cor: string) => {
+    if (corAtual === cor) return;
+    corAtual = cor;
+    secao.style.backgroundColor = cor;
+  };
+
+  const zerarTrechos = () => {
+    if (trechosZerados) return;
+    trechosZerados = true;
+    gsap.set(trechos, { opacity: 0 });
   };
 
   const st = ScrollTrigger.create({
@@ -132,10 +151,13 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     // visitante tempo demais numa seção só.
     // No celular caem para 2,5: cada tela presa é mais dedo de rolagem, e o
     // aparelho ainda tem que animar tudo isso com menos folga de processamento.
-    end: () => `+=${window.innerHeight * (window.innerWidth <= 767 ? 2.5 : 4)}px`,
+    end: () => `+=${window.innerHeight * (movel() ? 2.5 : 4)}px`,
     pin: true,
     pinSpacing: true,
-    scrub: 1,
+    // Scrub menor no celular: 1 significa um segundo para alcançar a posição do
+    // dedo, o que ali vira sensação de atraso. 0.5 responde mais rápido e ainda
+    // suaviza o suficiente.
+    scrub: movel() ? 0.5 : 1,
     invalidateOnRefresh: true,
     // Um pin desloca tudo que vem abaixo dele na página. Os outros ScrollTriggers
     // do site nascem em animations.ts, num bundle separado, sem ordem garantida
@@ -144,71 +166,83 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     refreshPriority: 1,
     onRefresh: () => {
       limparClones();
+      fase = -1;
+      corAtual = "";
+      trechosZerados = false;
       medir();
     },
+    // Ao sair da seção pelos dois lados, descarta os clones. Sem isso eles
+    // continuavam existindo à toa depois do efeito terminar.
+    onLeave: limparClones,
+    onLeaveBack: limparClones,
     onUpdate: (self) => {
       const p = self.progress;
       const escalaFinal = tamanhoFinal() / caixaIcones.largura;
       const base = -vh * 0.3;
-
-      // Alvo do encolhimento: centro da janela.
       const dxCheio = vw / 2 - caixaIcones.cx;
       const dyCheio = vh / 2 - caixaIcones.cy;
-
-      trechos.forEach((t) => gsap.set(t, { opacity: 0 }));
+      const lado = tamanhoFinal();
 
       if (p <= 0.3) {
         // Fase 1: cabeçalho sobe e some enquanto a fileira de ícones entra.
+        if (fase !== 1) {
+          fase = 1;
+          limparClones();
+          gsap.set(iconeEls, { x: 0 });
+          gsap.set(icones, { x: 0, scale: 1, opacity: 1 });
+        }
+        pintar(BRANCO);
+        zerarTrechos();
+
         const av = p / 0.3;
         const subida = base * av;
         const avCab = Math.min(1, p / 0.15);
 
-        gsap.set(cabecalho, {
-          transform: `translate(-50%, calc(-50% + ${-50 * avCab}px))`,
-          opacity: 1 - avCab,
-        });
-
-        limparClones();
-        secao.style.backgroundColor = BRANCO;
-        gsap.set(icones, { x: 0, y: subida, scale: 1, opacity: 1 });
+        gsap.set(cabecalho, { y: -50 * avCab, opacity: 1 - avCab });
+        gsap.set(icones, { y: subida });
 
         iconeEls.forEach((icone, i) => {
           const inicio = i * 0.1;
           const t = gsap.utils.clamp(0, 1, gsap.utils.mapRange(inicio, inicio + 0.5, 0, 1, av));
-          gsap.set(icone, { x: 0, y: -subida * (1 - t) });
+          gsap.set(icone, { y: -subida * (1 - t) });
         });
       } else if (p <= 0.6) {
         // Fase 2: ícones encolhem rumo ao centro e o fundo vira azul na metade.
-        const av = (p - 0.3) / 0.3;
-        gsap.set(cabecalho, { transform: "translate(-50%, calc(-50% + -50px))", opacity: 0 });
-        secao.style.backgroundColor = av >= 0.5 ? AZUL : BRANCO;
+        if (fase !== 2) {
+          fase = 2;
+          limparClones();
+          gsap.set(cabecalho, { y: -50, opacity: 0 });
+          gsap.set(iconeEls, { x: 0, y: 0 });
+          gsap.set(icones, { opacity: 1 });
+        }
+        zerarTrechos();
 
-        limparClones();
+        const av = (p - 0.3) / 0.3;
+        pintar(av >= 0.5 ? AZUL : BRANCO);
         gsap.set(icones, {
           x: dxCheio * av,
           y: base + dyCheio * av,
           scale: 1 + (escalaFinal - 1) * av,
-          opacity: 1,
         });
-        iconeEls.forEach((icone) => gsap.set(icone, { x: 0, y: 0 }));
       } else if (p <= 0.75) {
         // Fase 3: os ícones reais somem e clones voam até os slots, primeiro na
         // vertical e depois na horizontal.
+        if (fase !== 3) {
+          fase = 3;
+          gsap.set(cabecalho, { y: -50, opacity: 0 });
+          gsap.set(iconeEls, { x: 0, y: 0 });
+          gsap.set(icones, {
+            x: dxCheio,
+            y: base + dyCheio,
+            scale: escalaFinal,
+            opacity: 0,
+          });
+          if (!clones.length) criarClones(lado);
+        }
+        pintar(AZUL);
+        zerarTrechos();
+
         const av = (p - 0.6) / 0.15;
-        gsap.set(cabecalho, { transform: "translate(-50%, calc(-50% + -50px))", opacity: 0 });
-        secao.style.backgroundColor = AZUL;
-
-        gsap.set(icones, {
-          x: dxCheio,
-          y: base + dyCheio,
-          scale: escalaFinal,
-          opacity: 0,
-        });
-        iconeEls.forEach((icone) => gsap.set(icone, { x: 0, y: 0 }));
-
-        const lado = tamanhoFinal();
-        if (!clones.length) criarClones(lado);
-
         clones.forEach((c, i) => {
           if (i >= centroSlot.length) return;
           const de = posDepois(i, escalaFinal, dxCheio, base + dyCheio);
@@ -222,26 +256,24 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
             y = para.y;
             x = de.x + (para.x - de.x) * ((av - 0.5) / 0.5);
           }
-
-          c.style.left = `${x - lado / 2}px`;
-          c.style.top = `${y - lado / 2}px`;
-          c.style.opacity = "1";
+          // translate em vez de left/top: transform não dispara recálculo de
+          // layout, só composição.
+          c.style.transform = `translate(${x - lado / 2}px, ${y - lado / 2}px)`;
         });
       } else {
         // Fase 4: clones assentados nos slots e os trechos aparecem um a um.
-        gsap.set(cabecalho, { transform: "translate(-50%, calc(-50% + -100px))", opacity: 0 });
-        secao.style.backgroundColor = AZUL;
-        gsap.set(icones, { opacity: 0 });
-
-        const lado = tamanhoFinal();
-        if (!clones.length) criarClones(lado);
-
-        clones.forEach((c, i) => {
-          if (i >= centroSlot.length) return;
-          c.style.left = `${centroSlot[i].x - lado / 2}px`;
-          c.style.top = `${centroSlot[i].y - lado / 2}px`;
-          c.style.opacity = "1";
-        });
+        if (fase !== 4) {
+          fase = 4;
+          trechosZerados = false;
+          gsap.set(cabecalho, { y: -100, opacity: 0 });
+          gsap.set(icones, { opacity: 0 });
+          if (!clones.length) criarClones(lado);
+          clones.forEach((c, i) => {
+            if (i >= centroSlot.length) return;
+            c.style.transform = `translate(${centroSlot[i].x - lado / 2}px, ${centroSlot[i].y - lado / 2}px)`;
+          });
+        }
+        pintar(AZUL);
 
         ordem.forEach((item, pos) => {
           const inicio = 0.75 + pos * 0.03;
@@ -258,10 +290,7 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   let redimensionando: number | undefined;
   window.addEventListener("resize", () => {
     window.clearTimeout(redimensionando);
-    redimensionando = window.setTimeout(() => {
-      limparClones();
-      ScrollTrigger.refresh();
-    }, 150);
+    redimensionando = window.setTimeout(() => ScrollTrigger.refresh(), 150);
   });
 
   window.addEventListener("load", () => st.refresh());
