@@ -95,7 +95,16 @@ if (secao && !reduzido) {
         gsap.utils.mapRange(0, emProgresso(ENTRADA_FIM), 0, 1, progress),
       );
 
-      gsap.set(todos, { y: `${gsap.utils.mapRange(0, 1, 50, -50, entrada)}%` });
+      // ENTRADA DE 100% A 0%, E NÃO DE 50% A -50%.
+      //
+      // O CSS antigo centralizava o cartão com `top: 50%` mais
+      // `translate(-50%, 50%)`, ou seja, a posição base ficava meia altura ABAIXO
+      // do centro, e o -50% do fim da entrada era o que trazia para o meio.
+      // Ao trocar para `inset: 0` + `margin: auto` a base passou a ser o próprio
+      // centro, mas a faixa de valores continuou a mesma: o -50% subia meia
+      // altura a mais e o cartão parava colado no topo, com a metade de baixo da
+      // seção vazia. Era o azul sobrando embaixo do cartão cortado.
+      gsap.set(todos, { y: `${gsap.utils.mapRange(0, 1, 100, 0, entrada)}%` });
       gsap.set(frase, { y: `${gsap.utils.mapRange(0, 1, 0, -100, entrada)}%` });
 
       // Giro interpolado pelo progresso, sem tween de tempo.
@@ -114,7 +123,8 @@ if (secao && !reduzido) {
         const tiltLeque = leque[i] * giro;
         gsap.set(c, {
           rotationY: -180 + 180 * giro,
-          y: `${gsap.utils.mapRange(0, 1, -50, -250, p)}%`,
+          // Mesma correção da entrada: a saída parte de 0 (centro), não de -50.
+          y: `${gsap.utils.mapRange(0, 1, 0, -200, p)}%`,
           rotation: gsap.utils.mapRange(0, 1, tiltLeque, saida[i], p),
         });
       });

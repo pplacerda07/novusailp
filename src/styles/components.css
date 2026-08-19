@@ -859,7 +859,11 @@
 
 @media screen and (max-width: 479px) {
   .wa { right: 1rem; bottom: 1rem; }
-  .wa_card { width: calc(100vw - 2rem); }
+  /* Não é para ocupar a largura toda. `calc(100vw - 2rem)` dava 408px numa tela
+     de 440: o cartão virava um painel de ponta a ponta, desproporcional ao
+     botão de 56px logo abaixo. O min() mantém o tamanho de cartão de conversa e
+     só encolhe em telas realmente estreitas. */
+  .wa_card { width: min(18.5rem, calc(100vw - 2rem)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
