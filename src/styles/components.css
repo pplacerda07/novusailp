@@ -627,9 +627,10 @@
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
-  /* No empilhamento a ilustração vai para cima, igual à seção do chatbot. */
+  /* Texto antes da ilustração: no celular a pessoa deve ler o argumento antes
+     de ver o desenho, senão abre a seção sem saber do que se trata. */
   .tg-stage {
-    order: -1;
+    order: 1;
   }
   .tg-figura {
     max-width: 20rem;
@@ -907,10 +908,18 @@
   perspective: 1000px;
 }
 
+/* Centralização por `inset: 0` + `margin: auto`, e não por
+   `left: 50% + translate(-50%)`.
+   Motivo: o GSAP escreve a propriedade `transform` inteira nesses cartões a cada
+   quadro. Quando a centralização mora no mesmo `transform`, ela depende de o
+   GSAP preservar o translate percentual que veio do CSS, e basta uma escrita
+   perder isso para o cartão saltar meia tela para a direita. Com margin auto a
+   centralização é layout, não transform: o GSAP fica dono do transform sozinho
+   e não tem como atrapalhar. */
 .dc-card {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  inset: 0;
+  margin: auto;
   width: 24%;
   min-width: 19rem;
   max-width: 24rem;
@@ -944,13 +953,15 @@
   opacity: .9;
 }
 
+/* Só a face: o deslocamento inicial de 50% para baixo é o próprio script que
+   aplica no progresso 0, então não precisa estar aqui. */
 .dc-card--frente {
-  transform: translate(-50%, 50%) rotateY(0deg);
+  transform: rotateY(0deg);
   background-color: var(--base--navy);
   color: var(--base--white);
 }
 .dc-card--verso {
-  transform: translate(-50%, 50%) rotateY(180deg);
+  transform: rotateY(180deg);
 }
 
 .dc-etiqueta {
@@ -1431,8 +1442,9 @@
   .wm-copy {
     padding-left: 0;
   }
+  /* Texto antes da ilustração, mesma razão da seção de garantias. */
   .wm-stage {
-    order: -1;
+    order: 1;
     max-width: 32rem;
     margin-inline: auto;
     width: 100%;
@@ -1444,28 +1456,25 @@
   }
 }
 @media screen and (max-width: 479px) {
-  /* Em telas estreitas os balões absolutos se sobrepõem ao personagem.
-     Viram uma pilha em fluxo abaixo dele. */
-  .wm-stage {
-    aspect-ratio: auto;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+  /* Os balões continuam em volta do personagem, como no desktop: empilhá-los
+     embaixo desmontava a cena (a graça é o cara cercado das respostas do bot).
+     O personagem encolhe para abrir as duas colunas laterais onde eles cabem. */
   .wm-character {
-    width: 58%;
-    max-width: 11rem;
-  }
-  .wm-bubbles {
-    position: static;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: .5rem;
+    width: 40%;
+    max-width: 8rem;
   }
   .wm-bubble {
-    position: static;
-    max-width: none;
+    max-width: 8.5rem;
+    font-size: .6875rem;
+    padding: .375rem .5625rem;
+    border-radius: .75rem;
   }
+  .wm-bubble.is-1 { top: 2%; left: -5%; }
+  .wm-bubble.is-2 { top: 0; right: -5%; }
+  .wm-bubble.is-3 { top: 36%; left: -7%; }
+  .wm-bubble.is-4 { top: 33%; right: -7%; }
+  .wm-bubble.is-5 { bottom: 22%; left: -7%; }
+  .wm-bubble.is-6 { bottom: 3%; right: -5%; }
 }
 
 /* ── Logotipo ──────────────────────────────────────────────────────────────────

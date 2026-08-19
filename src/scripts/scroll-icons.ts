@@ -3,10 +3,28 @@
 //
 // Não é uma timeline: é um único ScrollTrigger com `pin` e um `onUpdate` que lê o
 // progresso de 0 a 1 e posiciona tudo à mão. As quatro fases:
+//
 //   0    → 0.30  cabeçalho some, ícones sobem do rodapé
 //   0.30 → 0.60  ícones encolhem rumo ao centro, fundo branco vira azul
 //   0.60 → 0.75  clones dos ícones voam até os slots dentro do texto
 //   0.75 → 1     os trechos de texto aparecem em ordem aleatória
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// GEOMETRIA MEDIDA UMA VEZ, NÃO A CADA QUADRO
+//
+// A primeira versão chamava getBoundingClientRect() dentro do onUpdate, sobre
+// elementos que o próprio onUpdate acabara de transformar. Isso trazia dois
+// problemas, os dois visíveis no celular:
+//
+//   1. Ler logo depois de escrever obriga o navegador a recalcular o layout na
+//      hora, várias vezes por quadro. É o que derrubava o frame rate.
+//   2. A posição nova era calculada a partir da posição já transformada, ou
+//      seja, dependia do quadro anterior. Rolando para baixo dava um resultado,
+//      rolando para cima dava outro, e os ícones ficavam subindo e descendo.
+//
+// Agora as medidas são tiradas uma vez, com os transforms limpos, e guardadas.
+// O onUpdate só escreve.
+// ─────────────────────────────────────────────────────────────────────────────
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -34,14 +52,78 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     [ordem[i], ordem[j]] = [ordem[j], ordem[i]];
   }
 
+  const tamanhoFinal = () => (window.innerWidth <= 991 ? 30 : 60);
+
+  // ── Cache de geometria ────────────────────────────────────────────────────
+  type Ponto = { x: number; y: number };
+  let caixaIcones = { cx: 0, cy: 0, largura: 1 };
+  let centroIcone: Ponto[] = [];
+  let centroSlot: Ponto[] = [];
+  let vw = 0;
+  let vh = 0;
+
+  const medir = () => {
+    vw = window.innerWidth;
+    vh = window.innerHeight;
+
+    // Limpa os transforms para medir a posição natural dos elementos.
+    gsap.set(icones, { clearProps: "transform" });
+    gsap.set(iconeEls, { clearProps: "transform" });
+
+    const rIcones = icones.getBoundingClientRect();
+    caixaIcones = {
+      cx: rIcones.left + rIcones.width / 2,
+      cy: rIcones.top + rIcones.height / 2,
+      largura: iconeEls[0]?.getBoundingClientRect().width || 1,
+    };
+    centroIcone = iconeEls.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    });
+
+    // Os slots vivem dentro da seção. Enquanto ela está presa, fica fixa no topo
+    // da janela, então a posição relativa à seção vale como posição na tela.
+    const rSecao = secao.getBoundingClientRect();
+    centroSlot = slots.map((el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        x: r.left - rSecao.left + r.width / 2,
+        y: r.top - rSecao.top + r.height / 2,
+      };
+    });
+  };
+
+  // Onde um ícone vai parar depois de a fileira inteira ser escalada e movida.
+  // A origem do transform é o centro da fileira, então o ponto p vira
+  // centro + escala * (p - centro) + deslocamento.
+  const posDepois = (i: number, escala: number, dx: number, dy: number): Ponto => ({
+    x: caixaIcones.cx + escala * (centroIcone[i].x - caixaIcones.cx) + dx,
+    y: caixaIcones.cy + escala * (centroIcone[i].y - caixaIcones.cy) + dy,
+  });
+
   let clones: HTMLElement[] = [];
   const limparClones = () => {
     clones.forEach((c) => c.remove());
     clones = [];
   };
 
-  // Tamanho final do ícone (o que cabe dentro da linha de texto).
-  const tamanhoFinal = () => (window.innerWidth <= 991 ? 30 : 60);
+  const criarClones = (lado: number) => {
+    clones = iconeEls.map((icone) => {
+      const c = icone.cloneNode(true) as HTMLElement;
+      c.className = "sc-dup";
+      // Fixed, e não absolute: a seção presa também é fixa, então os dois
+      // compartilham o mesmo sistema de coordenadas e não é preciso somar a
+      // rolagem da página a cada quadro.
+      c.style.position = "fixed";
+      c.style.width = `${lado}px`;
+      c.style.height = `${lado}px`;
+      c.style.zIndex = "3";
+      c.style.willChange = "transform";
+      c.setAttribute("aria-hidden", "true");
+      document.body.appendChild(c);
+      return c;
+    });
+  };
 
   const st = ScrollTrigger.create({
     trigger: secao,
@@ -60,18 +142,27 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     // de execução. refreshPriority alto faz este recalcular primeiro, para os
     // demais medirem já contando com o espaço que o pin ocupa.
     refreshPriority: 1,
+    onRefresh: () => {
+      limparClones();
+      medir();
+    },
     onUpdate: (self) => {
       const p = self.progress;
-      const escala = tamanhoFinal() / (iconeEls[0]?.getBoundingClientRect().width || 1);
+      const escalaFinal = tamanhoFinal() / caixaIcones.largura;
+      const base = -vh * 0.3;
+
+      // Alvo do encolhimento: centro da janela.
+      const dxCheio = vw / 2 - caixaIcones.cx;
+      const dyCheio = vh / 2 - caixaIcones.cy;
 
       trechos.forEach((t) => gsap.set(t, { opacity: 0 }));
 
       if (p <= 0.3) {
         // Fase 1: cabeçalho sobe e some enquanto a fileira de ícones entra.
         const av = p / 0.3;
-        const subida = -window.innerHeight * 0.3 * av;
-
+        const subida = base * av;
         const avCab = Math.min(1, p / 0.15);
+
         gsap.set(cabecalho, {
           transform: `translate(-50%, calc(-50% + ${-50 * avCab}px))`,
           opacity: 1 - avCab,
@@ -83,8 +174,7 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 
         iconeEls.forEach((icone, i) => {
           const inicio = i * 0.1;
-          const bruto = gsap.utils.mapRange(inicio, inicio + 0.5, 0, 1, av);
-          const t = Math.max(0, Math.min(1, bruto));
+          const t = gsap.utils.clamp(0, 1, gsap.utils.mapRange(inicio, inicio + 0.5, 0, 1, av));
           gsap.set(icone, { x: 0, y: -subida * (1 - t) });
         });
       } else if (p <= 0.6) {
@@ -94,67 +184,47 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         secao.style.backgroundColor = av >= 0.5 ? AZUL : BRANCO;
 
         limparClones();
-
-        const r = icones.getBoundingClientRect();
-        const dx = (window.innerWidth / 2 - (r.left + r.width / 2)) * av;
-        const dy = (window.innerHeight / 2 - (r.top + r.height / 2)) * av;
-        const base = -window.innerHeight * 0.3;
-
-        gsap.set(icones, { x: dx, y: base + dy, scale: 1 + (escala - 1) * av, opacity: 1 });
+        gsap.set(icones, {
+          x: dxCheio * av,
+          y: base + dyCheio * av,
+          scale: 1 + (escalaFinal - 1) * av,
+          opacity: 1,
+        });
         iconeEls.forEach((icone) => gsap.set(icone, { x: 0, y: 0 }));
       } else if (p <= 0.75) {
-        // Fase 3: os ícones reais somem e clones absolutos voam até os slots,
-        // primeiro na vertical e depois na horizontal.
+        // Fase 3: os ícones reais somem e clones voam até os slots, primeiro na
+        // vertical e depois na horizontal.
         const av = (p - 0.6) / 0.15;
         gsap.set(cabecalho, { transform: "translate(-50%, calc(-50% + -50px))", opacity: 0 });
         secao.style.backgroundColor = AZUL;
 
-        const r = icones.getBoundingClientRect();
-        const dx = window.innerWidth / 2 - (r.left + r.width / 2);
-        const dy = window.innerHeight / 2 - (r.top + r.height / 2);
         gsap.set(icones, {
-          x: dx,
-          y: -window.innerHeight * 0.3 + dy,
-          scale: escala,
+          x: dxCheio,
+          y: base + dyCheio,
+          scale: escalaFinal,
           opacity: 0,
         });
         iconeEls.forEach((icone) => gsap.set(icone, { x: 0, y: 0 }));
 
         const lado = tamanhoFinal();
-        if (!clones.length) {
-          clones = iconeEls.map((icone) => {
-            const c = icone.cloneNode(true) as HTMLElement;
-            c.className = "sc-dup";
-            c.style.position = "absolute";
-            c.style.width = `${lado}px`;
-            c.style.height = `${lado}px`;
-            c.style.zIndex = "3";
-            c.setAttribute("aria-hidden", "true");
-            document.body.appendChild(c);
-            return c;
-          });
-        }
+        if (!clones.length) criarClones(lado);
 
         clones.forEach((c, i) => {
-          if (i >= slots.length) return;
-          const de = iconeEls[i].getBoundingClientRect();
-          const paraR = slots[i].getBoundingClientRect();
-          const deX = de.left + de.width / 2 + window.scrollX;
-          const deY = de.top + de.height / 2 + window.scrollY;
-          const paraX = paraR.left + paraR.width / 2 + window.scrollX;
-          const paraY = paraR.top + paraR.height / 2 + window.scrollY;
+          if (i >= centroSlot.length) return;
+          const de = posDepois(i, escalaFinal, dxCheio, base + dyCheio);
+          const para = centroSlot[i];
 
-          let x = 0;
-          let y = 0;
+          let x = de.x;
+          let y = de.y;
           if (av <= 0.5) {
-            y = (paraY - deY) * (av / 0.5);
+            y = de.y + (para.y - de.y) * (av / 0.5);
           } else {
-            y = paraY - deY;
-            x = (paraX - deX) * ((av - 0.5) / 0.5);
+            y = para.y;
+            x = de.x + (para.x - de.x) * ((av - 0.5) / 0.5);
           }
 
-          c.style.left = `${deX + x - lado / 2}px`;
-          c.style.top = `${deY + y - lado / 2}px`;
+          c.style.left = `${x - lado / 2}px`;
+          c.style.top = `${y - lado / 2}px`;
           c.style.opacity = "1";
         });
       } else {
@@ -164,26 +234,27 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         gsap.set(icones, { opacity: 0 });
 
         const lado = tamanhoFinal();
+        if (!clones.length) criarClones(lado);
+
         clones.forEach((c, i) => {
-          if (i >= slots.length) return;
-          const r = slots[i].getBoundingClientRect();
-          c.style.left = `${r.left + r.width / 2 + window.scrollX - lado / 2}px`;
-          c.style.top = `${r.top + r.height / 2 + window.scrollY - lado / 2}px`;
+          if (i >= centroSlot.length) return;
+          c.style.left = `${centroSlot[i].x - lado / 2}px`;
+          c.style.top = `${centroSlot[i].y - lado / 2}px`;
           c.style.opacity = "1";
         });
 
         ordem.forEach((item, pos) => {
           const inicio = 0.75 + pos * 0.03;
-          const bruto = gsap.utils.mapRange(inicio, inicio + 0.015, 0, 1, p);
-          gsap.set(item.el, { opacity: Math.max(0, Math.min(1, bruto)) });
+          const t = gsap.utils.clamp(0, 1, gsap.utils.mapRange(inicio, inicio + 0.015, 0, 1, p));
+          gsap.set(item.el, { opacity: t });
         });
       }
     },
   });
 
-  // Os clones são posicionados em coordenadas absolutas de página e não se
-  // recalculam sozinhos. No resize eles são descartados e o ScrollTrigger
-  // remedido, senão ficam desalinhados até o próximo scroll.
+  // Resize de verdade (girar o aparelho, redimensionar a janela) precisa de nova
+  // medição. A variação de altura da barra de endereço no iOS não entra aqui:
+  // animations.ts liga ignoreMobileResize.
   let redimensionando: number | undefined;
   window.addEventListener("resize", () => {
     window.clearTimeout(redimensionando);
