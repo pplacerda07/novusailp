@@ -27,10 +27,15 @@ if (secao && !reduzido) {
   const frase = q(".dc-frase");
   const total = versos.length;
 
-  const ENTRADA_FIM = 80;
-  const GIRO = 150;
-  const SAIDA_INICIO = 220;
-  const SAIDA_DURACAO = 60;
+  // No celular todas as fases encolhem na mesma proporção: o efeito continua
+  // igual, só dura menos dedo de rolagem. 460svh viram 276svh.
+  const movel = window.innerWidth <= 767;
+  const f = movel ? 0.6 : 1;
+
+  const ENTRADA_FIM = 80 * f;
+  const GIRO = 150 * f;
+  const SAIDA_INICIO = 220 * f;
+  const SAIDA_DURACAO = 60 * f;
   const SVH_TOTAL = SAIDA_INICIO + total * SAIDA_DURACAO;
 
   const emProgresso = (svh: number) => svh / SVH_TOTAL;

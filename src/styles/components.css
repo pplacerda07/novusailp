@@ -1320,6 +1320,74 @@
   .fq-resposta { padding: 0 1rem 1.25rem 2.75rem; }
 }
 
+/* ════════════════════════════════════════════════════════════════════════════
+   AJUSTES DE CELULAR
+   Agrupados aqui de propósito: são correções de um problema só (o site foi
+   desenhado no desktop) e ficam mais fáceis de revisar juntas.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@media screen and (max-width: 767px) {
+  /* ── Hero ──────────────────────────────────────────────────────────────────
+     A arte é 2,11:1 (bem deitada) e a tela do celular é ~1:2,2 (bem em pé).
+     Com object-fit: cover o navegador precisa ampliar tanto para preencher que
+     sobra só uma tira do meio: some a loja, some o rapaz do notebook, e fica o
+     calendário solto que aparecia no print.
+     Aqui ela passa a `contain`, encostada embaixo, e o resto da seção recebe o
+     mesmo azul do fundo da arte, então a emenda não aparece. */
+  .section_hero {
+    background-color: #0166CE;
+  }
+  .img.is-hero {
+    object-fit: contain;
+    object-position: center bottom;
+    top: auto;
+    bottom: 0;
+    height: auto;
+  }
+  /* O título tinha 6 linhas a 44px. A escala responsiva do template não previa
+     frase longa nesse tamanho de tela. */
+  .hero_headline h1 {
+    font-size: 2.125rem;
+    line-height: 1.2;
+  }
+  .hero_headline {
+    max-width: none;
+  }
+
+  /* ── Botões ────────────────────────────────────────────────────────────────
+     A classe .button do template tem white-space: nowrap. No desktop tudo bem,
+     mas "Quero saber mais sobre o treinamento da IA" dá 476px numa tela de
+     440px: o botão vazava do cartão. Aqui o texto pode quebrar. */
+  .button {
+    white-space: normal;
+    text-align: center;
+    max-width: 100%;
+  }
+  .button.is-hero-invert.is-grande {
+    min-height: 2.75rem;
+    padding: .625rem 1.25rem;
+    font-size: .8125rem;
+    line-height: 1.35;
+  }
+
+  /* ── Contraste com o chatbot ───────────────────────────────────────────────
+     O tamanho da figura é definido no bloco de 479px mais abaixo, que vem
+     depois deste e venceria a disputa. Aqui só o texto dos balões. */
+  .wm-bubble {
+    font-size: .75rem;
+    padding: .4375rem .625rem;
+  }
+
+  /* ── Treinamento ───────────────────────────────────────────────────────────
+     O painel é decorativo nesse tamanho: reduzo para não roubar altura. */
+  .tr-shot {
+    --tr-escala: .34;
+  }
+  .tr-card {
+    aspect-ratio: 3 / 2;
+  }
+}
+
 /* ── Nome do produto ───────────────────────────────────────────────────────────
    VendeAI é o produto principal. Classe global (não tem prefixo de seção) porque
    o nome vai reaparecer em outras partes do site e precisa ter sempre o mesmo
@@ -1384,8 +1452,8 @@
     gap: 1.5rem;
   }
   .wm-character {
-    width: 70%;
-    max-width: 15rem;
+    width: 58%;
+    max-width: 11rem;
   }
   .wm-bubbles {
     position: static;

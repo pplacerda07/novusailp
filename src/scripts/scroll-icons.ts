@@ -46,9 +46,11 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   const st = ScrollTrigger.create({
     trigger: secao,
     start: "top top",
-    // 4 telas de scroll preso. O demo original usava 8, que segura o visitante
-    // tempo demais numa seção só.
-    end: () => `+=${window.innerHeight * 4}px`,
+    // 4 telas de scroll preso no desktop. O demo original usava 8, que segura o
+    // visitante tempo demais numa seção só.
+    // No celular caem para 2,5: cada tela presa é mais dedo de rolagem, e o
+    // aparelho ainda tem que animar tudo isso com menos folga de processamento.
+    end: () => `+=${window.innerHeight * (window.innerWidth <= 767 ? 2.5 : 4)}px`,
     pin: true,
     pinSpacing: true,
     scrub: 1,

@@ -9,6 +9,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ───────── Correção do scroll no celular ─────────
+// No iOS a barra de endereço aparece e some conforme a pessoa rola, e isso muda
+// a altura da janela. O ScrollTrigger enxerga essa mudança como um resize e
+// remede tudo, o que faz as seções presas (pin) darem um salto: é o efeito de a
+// página "puxar para cima" e a animação travar no meio.
+//
+// ignoreMobileResize manda ignorar essa variação de altura, que não é um resize
+// de verdade. Fica aqui porque este arquivo carrega em todas as páginas e a
+// configuração é global, valendo também para as seções de ícones e de cartões.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // ───────────────────────── 1. data-anim engine ─────────────────────────
