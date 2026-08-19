@@ -191,13 +191,18 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       trechosZerados = false;
       medir();
     },
-    // Ao sair da seção pelos dois lados, descarta os clones. Sem isso eles
-    // continuavam existindo à toa depois do efeito terminar.
+    // Saindo por cima (rolando de volta para antes da seção) os clones somem: a
+    // fase 1 os recria quando for a hora.
     //
-    // Zerar a fase junto é obrigatório: as fases só fazem o trabalho de montagem
-    // quando detectam mudança, então voltar para a fase 4 com `fase` ainda em 4
-    // pularia a recriação e os ícones não apareceriam na segunda passada.
-    onLeave: () => { limparClones(); fase = -1; },
+    // Saindo por baixo NÃO se apaga nada. O fim do pin não é o fim da seção: ela
+    // ainda está inteira na tela e só então começa a rolar para fora. Apagar os
+    // clones ali fazia os ícones desaparecerem do texto bem na hora em que a
+    // pessoa terminava de rolar o efeito, com a frase montada ainda à vista.
+    // Eles ficam onde estão e saem de cena junto com a seção, que é o
+    // comportamento certo agora que vivem dentro dela.
+    //
+    // Zerar a fase é obrigatório junto com o limpar: as fases só montam quando
+    // detectam mudança, então voltar com `fase` intacta pularia a recriação.
     onLeaveBack: () => { limparClones(); fase = -1; },
     onUpdate: (self) => {
       const p = self.progress;
@@ -308,11 +313,21 @@ if (secao && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     },
   });
 
-  // Resize de verdade (girar o aparelho, redimensionar a janela) precisa de nova
-  // medição. A variação de altura da barra de endereço no iOS não entra aqui:
-  // animations.ts liga ignoreMobileResize.
+  // Só reage a mudança de LARGURA.
+  //
+  // Este handler estava anulando o ignoreMobileResize ligado em animations.ts.
+  // No iOS, esconder a barra de endereço durante a rolagem dispara um evento de
+  // resize (só a altura muda). O ScrollTrigger foi configurado para ignorar
+  // isso, mas aqui a gente chamava refresh() na mão em qualquer resize: tudo era
+  // remedido no meio da rolagem e a página dava aquele solavanco de ir e voltar.
+  //
+  // Girar o aparelho ou redimensionar a janela muda a largura, e aí sim vale
+  // remedir.
+  let larguraAnterior = window.innerWidth;
   let redimensionando: number | undefined;
   window.addEventListener("resize", () => {
+    if (window.innerWidth === larguraAnterior) return;
+    larguraAnterior = window.innerWidth;
     window.clearTimeout(redimensionando);
     redimensionando = window.setTimeout(() => ScrollTrigger.refresh(), 150);
   });
